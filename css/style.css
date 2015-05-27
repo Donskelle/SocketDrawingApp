@@ -1,0 +1,187 @@
+/**
+ * Reset CSS
+ * Um unterschiedliche Darstellungen zu vermeiden
+ */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+/**
+ * apply a natural box layout model to all elements, but allowing components to change 
+ */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+	background: #a0a0a0;
+}
+
+canvas {
+	background:white;
+}
+
+ul > li {
+	list-style: none;
+}
+
+a.iconLine, a.iconLine:visited {
+	color: black;
+}
+
+/**
+ * Options Menu
+ */
+.mainOptionsWrapper.visible #closeMainOptions{
+	display: block;
+}
+.mainOptionsWrapper.visible #openMainOptions{
+	display: none;
+}
+.mainOptionsWrapper #closeMainOptions{
+	display: none;
+}
+.mainOptionsWrapper #openMainOptions{
+	display: block;
+}
+.mainOptionsWrapper.visible {
+		
+}
+.mainOptionsWrapper {
+	position: fixed;
+	top:0;
+	left: 0;
+		
+
+}
+
+.mainOptionsWrapper.visible .mainOptionsMenu {
+	display: block;
+}
+.mainOptionsWrapper .mainOptionsMenu {
+	display: none;
+}
+	
+
+
+/**
+ * Draw Operations Menu
+ */
+.drawOperations {
+	position: fixed;
+	right: 0;
+	top:10px;
+	width: 150px;
+	margin-right: -50px;
+}
+.drawOperations.visible {
+	margin-right: 0;
+	-webkit-animation: margin 1;
+	-o-animation: margin 1;
+	animation: margin 1;
+}
+
+.openCloseMenu {
+	width:50px;
+}
+.paintOptions {
+	width: 100px
+}
+.drawOperations #closeDrawOperations{
+	display: none;
+}
+.drawOperations #openDrawOperations{
+	display: block;
+}
+.drawOperations.visible #openDrawOperations{
+	display:none;
+}
+.drawOperations.visible #closeDrawOperations{
+	display: block;
+}
+
+
+/**
+ * Some helping Classes
+ */
+.floating {
+	float: left;
+}
+.clearAfter:after {
+	content: ".";
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+}
+
+
+/**
+ * Canvas
+ */
+canvas {
+	display: block;
+	margin: 0 auto;
+}
+
+/**
+ * Link Default Style
+ */
+button {
+}
+a, a:visited {
+	display: inline-block;
+	height: 30px;
+	color:blue;
+	line-height: 30px;
+	padding: 0 15px;
+	background: #a0a0a0;
+}
+a:hover {
+	
+}
+
+
+/**
+ * Click Events
+ */
+#newGroup:target {
+	display:block;
+}
+#newCanvas:target {
+	display:block;
+}
+
+
+/**
+ * Lightbox Klassen
+ */
+.lightboxWrapper {
+	display: none;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	height: 100vh;
+	width: 100%;
+
+	background-color: rgba(0, 0, 0, 0.7);
+}
+.lightboxWrapper .lightboxContent {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	height: 400px;
+	width: 400px;
+	margin-top: -200px;
+	margin-left: -200px;
+	padding: 20px;
+
+	background: white;
+}
+#closeLightbox {
+	display: none;
+}
