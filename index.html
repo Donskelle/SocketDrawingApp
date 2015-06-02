@@ -7,8 +7,8 @@
 	<link rel="stylesheet" href="css/font.css">
 </head>
 <body>
-	<div class="canvasWrapper">
-		<canvas id="canvas">Canvas wird nicht unterstützt</canvas>
+	<div id="canvasWrapper">
+		
 	</div>
 
 	<div class="drawOperations" id="drawOperationsMenu">
@@ -24,25 +24,24 @@
 				<li><a href="#">Stift 4</a></li>
 				<li><a href="#">Radierer</a></li>
 			</ul>
-			<select class="penOptions" name="strokeWidth">
+
+			<select class="penOptions" name="strokeWidth" id="widthPicker">
 				<option value="10">10px</option>
-				<option value="15">15px</option>
+				<option value="15" selected>15px</option>
 				<option value="20">20px</option>
 				<option value="30">30px</option>
 			</select>
+
 			<a href="#" id="revert">Operation zurück</a>
-			<select name="lineJoin">
-				<option value="" selected>round</option>
-				<option value="">eckig</option>
-				<option value="">eckig</option>
+
+			<select name="lineJoin" id="strokePicker">
+				<option value="round" selected>rund</option>
+				<option value="bevel">glatt</option>
+				<option value="miter">eckig</option>
 			</select>
-			<select name="color" id="colorPicker">
-				<option value="blue">Blau</option>
-				<option value="green">Grün</option>
-				<option value="yellow">Gelb</option>
-				<option value="black">Schwarz</option>
-				<option value="ping">Pink</option>
-			</select>
+
+			<input type="color" name="color" id="colorPicker">
+			</input>
 		</div>
 	</div>
 
@@ -102,8 +101,9 @@
 
 	<a id="closeLightbox" href="#closeLightbox"></a>
 	<script src="js/interaction.js"></script>
-	<script src="js/canvas.js"></script>
 	<script src="js/pen.js"></script>
+	<script src="js/canvas.js"></script>
+	
 	<script src="js/helpFunctions.js"></script>
 	<script src="js/communication.js"></script>
 	

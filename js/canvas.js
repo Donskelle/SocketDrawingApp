@@ -1,79 +1,39 @@
 "use strict";
 function Canvas(_optionsPara) {
 	var options = {
-		width: 600,
-		height: 400,
+		width: 1000,
+		height: 600,
 		background: "white",
 		backgroundImage: null,
-		id: "canvas"
+		canvasWrapper: "canvasWrapper",
+                revertLink: "revert"
 	};
 	options = HelpFunction.merge(options, _optionsPara);
 	
         var offset = {};
-	var canvas, ctx;
+        var arrayCanvas = new Array();
+	//var canvas, ctx;
         var clickX = new Array();
         var clickY = new Array();
         var clickDrag = new Array();
-        var penStyle = new Array();
+        var pens = new Array();
 
-        var pen = new Pen;
+        var penManager = new Pen();
 
-        this.Pen = function() {
-                var pens = new Array();
-                var color = "#fff";
-                var lineArt = "round";
-                var width = 15;
-                var changePen = false;
-                var currentPen = 0;
+        
 
-                (function init() {
-                        pens[currentPen] = {
-                                strokeStyle : color,
-                                lineJoin : lineArt,
-                                lineWidth : width
-                        };
-                })();
-                (function() {
-                        this.setColor = function(paraColor) {
-                                color = paraColor;
-                                changePen = true;
-                        };
-                        this.setLineArt = function(paraLineArt) {
-                                lineJoin = paraLineArt;
-                                changePen = true;
-                        };
-                        this.setLineWidth = function(paraLineWidth) {
-                                width = paraLineWidth;
-                                changePen = true;
-                        };
-                        this.getPen = function (i) {
-                                if (typeof i != "undefined" ) {
-                                        return pen[i];
-                                }
-                                else if (changePen === true)
-                                {
-                                        pens[currentPen++] = {
-                                                strokeStyle : color,
-                                                lineJoin : lineArt,
-                                                lineWidth : width
-                                        };
-                                        changePen = false;
-                                        return pens[currentPen];
-                                }
-                                return {}
-                        };
-                        this.getCurrentNumber = function() {
-                                return currentPen;
-                        };
-                }).call(Pen.prototype);
-        }
+        this.setPen = function(penNumber, canvasId) {
+                if(arrayCanvas[canvasId].currentPen == penNumber)
+                        return;
 
-        this.setPen = function(pen) {
-                // Clears the canvas
-                var options = pen.getPen(pen);
-                /*ctx.strokeStyle = "#dag231";
-                ctx.lineJoin = "round";
-                ctx.lineWidth = 5;*/
+                
+                var options = penManager.getPen(penNumber);
+                arrayCanvas[canvasId].ctx.strokeStyle = options.strokeStyle;
+                arrayCanvas[canvasId].ctx.lineJoin = options.lineJoin;
+                arrayCanvas[canvasId].ctx.lineWidth =  options.lineWidth;
+
+                arrayCanvas[canvasId].currentPen = penNumber;
+
         }
 
 
@@ -97,78 +57,163 @@ function Canvas(_optionsPara) {
                         clickY.pop();
                         clickDrag.pop();
                 }
+
+                //
+                while((Math.floor(clickX.length / 500) + 1) < arrayCanvas.length) {
+                        console.log((Math.floor(clickX.length / 500) + 1) + " deleteCanvas " + arrayCanvas.length);
+                        console.log("deleteCanvas");
+
+
+
+                        var test = deleteCanvas();
+                }
+
+                console.log(clickX.length);
                 this.draw();
         }
 
 
         this.addClick = function(x, y, dragging) {
-                self.setX( x - offset.X );
-                self.setY( y - offset.Y );
+                setX( x - offset.X );
+                setY( y - offset.Y );
                 clickDrag.push(dragging);
-                penStyle.push(pen.getCurrentNumber);
+
+                pens.push(penManager.getCurrentNumber());
+                console.log(clickX.length);
+                // Jedes Mal wenn 500 Schritte gezeichnet wurden, wird ein neues Canvas erstellt, um die Rechenoperatinen zu minimieren.
+                if (clickX.length % 500 == 0)
+                {
+                        addCanvas();
+                }
         }
 
 
-        this.draw = function(pen) {
-                self.drawDefaults();
+        this.draw = function() {
+                var canvasToDraw = Math.floor(clickX.length/500);
 
-                if (typeof pen != "undefined")
-                        this.setPen( pen );
+                drawDefaults(canvasToDraw);
 
-                for (var i = 0; i < clickX.length; i++) {
-                        ctx.beginPath();
+                for (var i = canvasToDraw * 500; i < clickX.length; i++) {
+                        arrayCanvas[canvasToDraw].ctx.beginPath();
+
+                        this.setPen( pens[i], canvasToDraw);
+
                         if(clickDrag[i] && i) {
-                                ctx.moveTo(clickX[i-1], clickY[i-1]);
+                                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i-1], clickY[i-1]);
                         }
                         else {
-                                ctx.moveTo(clickX[i] -1, clickY[i]);
+                                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i] -1, clickY[i]);
                         }
-                        ctx.lineTo(clickX[i], clickY[i]);
-                        ctx.closePath();
-                        ctx.stroke();
+                        arrayCanvas[canvasToDraw].ctx.lineTo(clickX[i], clickY[i]);
+                        arrayCanvas[canvasToDraw].ctx.closePath();
+                        arrayCanvas[canvasToDraw].ctx.stroke();
                 };
         }
 
-	var self = {
-                init : function() {
-                	canvas = document.getElementById(options.id);
-                	ctx = canvas.getContext('2d');
+	this.init = function() {
+                var paint = false;
+                var that = this;
+                
+                addCanvas(0);
 
-                	canvas.width = options.width;
-                	//canvas.style.width = options.width + "px";
-                	canvas.height = options.height;
-                	//canvas.style.height = options.height + "px";
-                	self.drawDefaults();
-        		self.offsetCanvas();
+                offsetWrapper();
+
+        	window.addEventListener('resize', function() {
+                        offsetWrapper();
+                }, true);
 
 
-                	window.addEventListener('resize', function() {
-                		self.offsetCanvas();
-        		    }, true);
-                },
+                var revertLink = document.getElementById(options.revertLink);
+                Interaction.addClickListener.apply(revertLink, [function (e) {
+                        that.revert();
+                }]);
 
-                drawDefaults : function() {
-                	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                	if(options.backgroundImage != null)
+                var canvasWrapper = document.getElementById(options.canvasWrapper);
+
+                Interaction.addMouseDownListener.apply(canvasWrapper, [function (e) {
+                        that.addClick(e.x, e.y, false);
+                        that.draw();
+                        paint = true;
+                }]);
+
+
+                Interaction.addMouseMoveListener.apply(canvasWrapper, [function (e) {
+                        if(paint)
                         {
-                                ctx.drawImage(options.backgroundImage, 0, 0, options.width, options.heigt);
+                                that.addClick(e.x, e.y, true);
+                                that.draw();
                         }
-                },
-        	offsetCanvas: function() { 
-                	canvas.style.marginTop = ((window.innerHeight - canvas.height) / 2) + "px";
-                        offset.X = canvas.offsetLeft;
-                        offset.Y = canvas.offsetTop;
-                },
+                }]);
 
-                setX : function (x) {
-                        clickX.push(x);
-                },
+                Interaction.addClickListener.apply(canvasWrapper, [function (e) {
+                        paint = false;
+                }]);
 
-                setY : function(y) {
-                        clickY.push(y);
+                Interaction.addMouseLeaveListener.apply(canvasWrapper, [function (e) {
+                        paint = false;
+                }]);
+        }
+
+        var drawDefaults = function(i) {
+        	arrayCanvas[i].ctx.clearRect(0, 0, options.width, options.height);
+
+        	if(options.backgroundImage != null && i == 0)
+                {
+                        arrayCanvas[i].ctx.drawImage(options.backgroundImage, 0, 0, options.width, options.heigt);
                 }
-	};
-	return self.init();
+        };
 
+
+        var offsetWrapper = function() {
+                var wrapper = document.getElementById(options.canvasWrapper);
+
+                wrapper.style.marginTop = ((window.innerHeight - options.height) / 2) + "px";
+
+                offset.Y = wrapper.offsetTop;
+                offset.X = wrapper.offsetLeft;
+        };
+
+
+        var setX = function (x) {
+                clickX.push(x);
+        };
+
+
+        var setY = function(y) {
+                clickY.push(y);
+        };
+
+
+        var addCanvas = function() {
+                var i = arrayCanvas.length;
+                var canv = document.createElement('canvas');
+                canv.id = 'canvas_' + i;
+
+                document.getElementById(options.canvasWrapper).style.width = options.width + "px";
+                document.getElementById(options.canvasWrapper).appendChild(canv);
+                arrayCanvas[i] = {};
+                arrayCanvas[i].canvas = canv;
+                arrayCanvas[i].ctx = canv.getContext('2d');
+                arrayCanvas[i].currentPen = null;
+
+                canv.width = options.width;
+                //canvas.style.width = options.width + "px";
+                canv.height = options.height;
+                if(i != 0)
+                        canv.style.marginTop = "-" + options.height + "px";
+                //canvas.style.height = options.height + "px";
+                drawDefaults(i);
+        }
+
+        var deleteCanvas = function() {
+                var i = arrayCanvas.length - 1;
+                var canvas = arrayCanvas[i].canvas;
+                canvas.parentNode.removeChild(canvas);;
+
+                arrayCanvas.pop();
+        }
+
+
+	return this.init();
 }

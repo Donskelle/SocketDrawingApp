@@ -1,6 +1,7 @@
 
-	var canvas = new Canvas();
-	var pen = new Pen();
+	var canvas = new Canvas({
+		
+	});
 	var paint = false;
 
 	var menuDrawOperations = new HelpFunction.createMenu({
@@ -16,35 +17,7 @@
 	});
 
 
-	var canvasDiv = document.getElementById("canvas");
-	var revertLink = document.getElementById("revert");
 
-	revert.addEventListener("click", function() {
-		canvas.revert();
-	});
-
-	canvasDiv.addEventListener("mousedown", function (e) {
-		canvas.addClick(e.x, e.y, false);
-		canvas.draw();
-		paint = true;
-	});
-	canvasDiv.addEventListener("mousemove", function(e) {
-		if(paint)
-		{
-			canvas.addClick(e.x, e.y, true);
-			canvas.setPen
-			canvas.draw();
-		}
-	});
-
-	
-	canvasDiv.addEventListener("mouseup", function(e) {
-		paint = false;
-	});
-
-	canvasDiv.addEventListener("mouseleave", function(e) {
-		paint = false;
-	});
 
 
 	/**
@@ -78,12 +51,6 @@
 		var fields = Interaction.readForm.apply(formCreateGroup);
 		HelpFunctions.closeLightbox();
 		formCreateGroup.reset();
-	}]);
-
-
-	var colorPicker = document.getElementById(colorPicker);
-	Interaction.addOnChangeListener.apply(colorPicker, [function (e) {
-		pen.color = e.target.value;
 	}]);
 
 

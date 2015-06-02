@@ -26,6 +26,20 @@ function Interaction() {
         Interaction.addListener.apply(this, ["touchend", callback]);
     }
 
+    this.addMouseDownListener = function(callback) {
+        Interaction.addListener.apply(this, ["mousedown", callback]);
+        Interaction.addListener.apply(this, ["touchstart", callback]);
+    }
+
+    this.addMouseMoveListener = function(callback) {
+        Interaction.addListener.apply(this, ["mousemove", callback]);
+        Interaction.addListener.apply(this, ["touchmove", callback]);
+    }
+
+    this.addMouseLeaveListener = function(callback) {
+        Interaction.addListener.apply(this, ["mouseleave", callback]);
+        Interaction.addListener.apply(this, ["touchcancel", callback]);
+    }
 
     this.addSubmitListener = function(callback) {
         Interaction.addListener.apply(this, ["submit", callback]);

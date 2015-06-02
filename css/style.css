@@ -21,10 +21,6 @@ body {
 	background: #a0a0a0;
 }
 
-canvas {
-	background:white;
-}
-
 ul > li {
 	list-style: none;
 }
@@ -126,6 +122,13 @@ a.iconLine, a.iconLine:visited {
 canvas {
 	display: block;
 	margin: 0 auto;
+}
+
+#canvasWrapper {
+	margin: 0 auto;
+}
+#canvasWrapper canvas:first-child{
+	background: white;
 }
 
 /**
