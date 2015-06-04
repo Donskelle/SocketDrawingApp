@@ -22,8 +22,6 @@ function Pen() {
         Interaction.addOnChangeListener.apply(strokePicker, [setLineArt]);
         Interaction.addOnChangeListener.apply(widthPicker, [setLineWidth]);
 
-
-
        	
         function setColor (paraColor) {
         	// Wenn durch das Change Event ausgelöst wird, wird der Wert aus dem colorPicker genommen.
@@ -57,8 +55,22 @@ function Pen() {
 
 
         this.getPen = function(i) {
+            console.log(pens[i]);
             return pens[i];
         };
+
+
+        this.rebuild = function() {
+            pens.length = 0;
+            currentPen = 0;
+
+            pens[currentPen] = {
+                strokeStyle : setColor({}),
+                lineJoin : setLineArt({}),
+                lineWidth : setLineWidth({})
+            };
+
+        }
 
 
         this.getCurrentNumber = function() {

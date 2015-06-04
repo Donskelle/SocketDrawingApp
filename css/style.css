@@ -20,6 +20,9 @@ html {
 body {
 	background: #a0a0a0;
 }
+input {
+	display: block;
+}
 
 ul > li {
 	list-style: none;
@@ -71,8 +74,8 @@ a.iconLine, a.iconLine:visited {
 	position: fixed;
 	right: 0;
 	top:10px;
-	width: 150px;
-	margin-right: -50px;
+	width: 300px;
+	margin-right: -250px;
 }
 .drawOperations.visible {
 	margin-right: 0;
@@ -85,7 +88,7 @@ a.iconLine, a.iconLine:visited {
 	width:50px;
 }
 .paintOptions {
-	width: 100px
+	width: 250px
 }
 .drawOperations #closeDrawOperations{
 	display: none;
@@ -184,6 +187,12 @@ a:hover {
 	padding: 20px;
 
 	background: white;
+}
+.lightboxWrapper .lightboxContent *{
+	display: block;
+}
+.lightboxWrapper .lightboxContent input {
+	margin-bottom: 15px;
 }
 #closeLightbox {
 	display: none;

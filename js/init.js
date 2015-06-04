@@ -34,12 +34,12 @@
 	 * Neues Canvas erstellen
 	 */
 	var formCreateCanvas = document.getElementById("formCreateCanvas");
-
 	Interaction.addSubmitListener.apply(formCreateCanvas, [function (e) {
 		var fields = Interaction.readForm.apply(formCreateCanvas);
 		HelpFunction.closeLightbox();
-		formCreateCanvas.reset();
-		canvas = new Canvas(fields);
+		canvas.rebuild(fields);
+
+		document.getElementById("formCreateCanvas").reset();
 	}]);
 
 

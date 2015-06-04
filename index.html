@@ -48,7 +48,7 @@
 	<div class="mainOptionsWrapper" id="mainOptionsWrapper">
 		<div class="mainOptionsMenu">
 			<a href="#newCanvas">Neu</a>
-			<a href="">Speichern</a>
+			<a href="" id="save" target="_blank">Speichern</a>
 			<a href="#newGroup">Gruppe erstellen</a>
 
 			
@@ -73,12 +73,15 @@
 		<div class="lightboxContent">
 			<h1>Neue Zeichnung</h1>
 			<form id="formCreateCanvas">
+				<label for="canvasName">Name</label>
 				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name">
-				<input type="text" value="200" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width">
-				<input type="text" value="200" placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height">
-				<input type="file">Bild hochladen</input>
-				<button >Absenden</button>
-				<a href="#">Erstellen</a>
+				<label for="canvasHeight">Breite Canvas</label>
+				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width">
+				<label for="canvasHeight">Höhe Canvas</label>
+				<input type="text" value="" required placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height">
+				<label for="fileUpload">Bild hochladen</label>
+				<input type="file" id="fileUpload" name="backgroundImage"></input>
+				<button href="#" id="buttonCreate">Erstellen</button>
 				<a href="#closeLightBox">Schließen</a>
 			</form>
 		</div>
@@ -102,7 +105,9 @@
 	<a id="closeLightbox" href="#closeLightbox"></a>
 	<script src="js/interaction.js"></script>
 	<script src="js/pen.js"></script>
-	<script src="js/canvas.js"></script>
+	<script src="js/canvasDrawer.js"></script>
+	<script src="js/drawing.js"></script>
+	
 	
 	<script src="js/helpFunctions.js"></script>
 	<script src="js/communication.js"></script>
