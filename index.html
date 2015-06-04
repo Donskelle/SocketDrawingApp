@@ -18,11 +18,11 @@
 		</div>
 		<div class="floating paintOptions">
 			<ul class="pen">
-				<li><a href="#">Stift 1</a></li>
-				<li><a href="#">Stift 2</a></li>
-				<li><a href="#">Stift 3</a></li>
-				<li><a href="#">Stift 4</a></li>
-				<li><a href="#">Radierer</a></li>
+				<li><a href="#" class="active" id="pen_1">Stift 1</a></li>
+				<li><a href="#" id="pen_2">Stift 2</a></li>
+				<li><a href="#" id="pen_3">Stift 3</a></li>
+				<li><a href="#" id="pen_4">Stift 4</a></li>
+				<li><a href="#" id="pen_5">Radierer</a></li>
 			</ul>
 
 			<select class="penOptions" name="strokeWidth" id="widthPicker">
@@ -103,14 +103,15 @@
 	</div>
 
 	<a id="closeLightbox" href="#closeLightbox"></a>
-	<script src="js/interaction.js"></script>
-	<script src="js/pen.js"></script>
-	<script src="js/canvasDrawer.js"></script>
-	<script src="js/drawing.js"></script>
+
+	<script src="js/drawer/helpFunctions.js"></script>
+	<script src="js/drawer/communication.js"></script>
+
+	<script src="js/drawer/interaction.js"></script>
+	<script src="js/drawer/pen.js"></script>
+	<script src="js/drawer/canvas.js"></script>
+	<script src="js/drawer/drawer.js"></script>
 	
-	
-	<script src="js/helpFunctions.js"></script>
-	<script src="js/communication.js"></script>
 	
 	<script src="js/init.js"></script>
 </body>

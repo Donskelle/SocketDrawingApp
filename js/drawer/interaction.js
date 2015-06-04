@@ -8,17 +8,8 @@ function Interaction() {
 (function(){
     this.makeCallback = function(callback) {
         return function(e) {
-            //Interaction.callbackFunction(callback, e);
             callback(e);
-            //e.preventDefault();
-            //return false;
         };
-    }
-
-    this.callbackFunction = function (callback,e) {
-        callback(e);
-        e.preventDefault();
-        return false;
     }
 
     this.addListener = function (listener, callback) {

@@ -104,6 +104,10 @@ a.iconLine, a.iconLine:visited {
 }
 
 
+.paintOptions .pen a.active{
+	font-weight: bold;
+}
+
 /**
  * Some helping Classes
  */

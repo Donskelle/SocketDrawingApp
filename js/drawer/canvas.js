@@ -1,18 +1,7 @@
-"use strict";
-function Drawing(_optionsPara) {
-	var options = {
-		width: 1000,
-		height: 600,
-		background: "white",
-		backgroundImage: null,
-		canvasWrapper: "canvasWrapper",
-        revertLink: "revert",
-        saveLink: "save",
-        name: "canvasDrawer"
-	};
-	options = HelpFunction.merge(options, _optionsPara);
-	
-    var offset = {};
+"use_strict";
+
+function Canvas(options) {
+	var offset = {};
     var arrayCanvas = new Array();
 
     var clickX = new Array();
@@ -22,7 +11,13 @@ function Drawing(_optionsPara) {
 
     var penManager = new Pen();
 
-    
+
+    this.init = function() {
+    	addCanvas();
+
+        this.offsetWrapper();
+    }
+
 
     this.setPen = function(penNumber, canvasId) {
         if(arrayCanvas[canvasId].currentPen == penNumber)
@@ -33,28 +28,30 @@ function Drawing(_optionsPara) {
         arrayCanvas[canvasId].ctx.strokeStyle = options.strokeStyle;
         arrayCanvas[canvasId].ctx.lineJoin = options.lineJoin;
         arrayCanvas[canvasId].ctx.lineWidth =  options.lineWidth;
+        arrayCanvas[canvasId].ctx.lineCap = 'round';
 
         arrayCanvas[canvasId].currentPen = penNumber;
     }
+
 
     this.rebuild = function(_optionsPara) {
         clickX.length = 0;
         clickY.length = 0;
         clickDrag.length = 0;
         pens.length = 0;
-
-        options = HelpFunction.merge(options, _optionsPara);
+        options = _optionsPara;
 
         penManager.rebuild();
 
         while (arrayCanvas.length != 0)
         {
-                deleteCanvas();
+            deleteCanvas();
         }
 
 
         if(options.backgroundImage != null && options.backgroundImage != "")
         {
+            var that = this;
             var input =  document.getElementById("fileUpload");
 
             var fReader = new FileReader();
@@ -64,15 +61,14 @@ function Drawing(_optionsPara) {
                 options.backgroundImage.src = event.target.result;
                 
                 addCanvas();
-                offsetWrapper();
+                that.offsetWrapper();
             }
         }
         else {
             addCanvas(); 
-            offsetWrapper();
-        }        
+            this.offsetWrapper();
+        }
     }
-
 
     this.revert = function() {
         if(clickDrag[clickDrag.length - 1 ] == true)
@@ -105,7 +101,6 @@ function Drawing(_optionsPara) {
         this.draw();
     }
 
-
     this.addClick = function(x, y, dragging) {
         setX( x - offset.X );
         setY( y - offset.Y );
@@ -119,7 +114,6 @@ function Drawing(_optionsPara) {
             addCanvas();
         }
     }
-
 
     this.draw = function() {
         var canvasToDraw = Math.floor(clickX.length/500);
@@ -141,62 +135,6 @@ function Drawing(_optionsPara) {
             arrayCanvas[canvasToDraw].ctx.closePath();
             arrayCanvas[canvasToDraw].ctx.stroke();
         };
-    }
-
-	this.init = function() {
-        var paint = false;
-        var that = this;
-        
-        addCanvas(0);
-
-        offsetWrapper();
-
-
-        /**
-         * Initzialisierung der Events
-         */
-    	window.addEventListener('resize', function() {
-            offsetWrapper();
-        }, true);
-
-
-        var saveButton = document.getElementById(options.saveLink);
-        saveButton.addEventListener('click', function(e) {
-            saveButton.attributes.download = options.name + ".png";
-            saveButton.href = that.save(); 
-        }, true);
-
-
-        var revertLink = document.getElementById(options.revertLink);
-        Interaction.addClickListener.apply(revertLink, [function (e) {
-            that.revert();
-        }]);
-
-
-        var canvasWrapper = document.getElementById(options.canvasWrapper);
-
-        Interaction.addMouseDownListener.apply(canvasWrapper, [function (e) {
-            that.addClick(e.x, e.y, false);
-            that.draw();
-            paint = true;
-        }]);
-
-
-        Interaction.addMouseMoveListener.apply(canvasWrapper, [function (e) {
-            if(paint)
-            {
-                that.addClick(e.x, e.y, true);
-                that.draw();
-            }
-        }]);
-
-        Interaction.addClickListener.apply(canvasWrapper, [function (e) {
-                paint = false;
-        }]);
-
-        Interaction.addMouseLeaveListener.apply(canvasWrapper, [function (e) {
-                paint = false;
-        }]);
     }
 
     this.save = function() {
@@ -232,7 +170,7 @@ function Drawing(_optionsPara) {
     };
 
 
-    var offsetWrapper = function() {
+    this.offsetWrapper = function() {
         var wrapper = document.getElementById(options.canvasWrapper);
 
         wrapper.style.marginTop = ((window.innerHeight - options.height) / 2) + "px";
@@ -268,10 +206,10 @@ function Drawing(_optionsPara) {
         //canvas.style.width = options.width + "px";
         canv.height = options.height;
         if(i != 0)
-                canv.style.marginTop = "-" + options.height + "px";
+            canv.style.marginTop = "-" + options.height + "px";
         //canvas.style.height = options.height + "px";
         drawDefaults(i);
-    }
+    };
 
     var deleteCanvas = function() {
         var i = arrayCanvas.length - 1;
@@ -279,8 +217,10 @@ function Drawing(_optionsPara) {
         canvas.parentNode.removeChild(canvas);;
 
         arrayCanvas.pop();
+    };
+    this.test = function() {
+    	alert("hi");
     }
 
-
-	return this.init();
+    return this.init();
 }
