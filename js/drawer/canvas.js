@@ -1,4 +1,4 @@
-"use_strict";
+"use strict";
 
 function Canvas(options) {
 	var offset = {};
@@ -13,9 +13,11 @@ function Canvas(options) {
 
 
     this.init = function() {
+        
     	addCanvas();
 
         this.offsetWrapper();
+        return this;
     }
 
 
@@ -31,6 +33,9 @@ function Canvas(options) {
         arrayCanvas[canvasId].ctx.lineCap = 'round';
 
         arrayCanvas[canvasId].currentPen = penNumber;
+        arrayCanvas[canvasId].drawFunction = options.drawingFunction;
+
+        console.log(arrayCanvas[canvasId].drawFunction);
     }
 
 
@@ -93,10 +98,7 @@ function Canvas(options) {
 
         //
         while((Math.floor(clickX.length / 500) + 1) < arrayCanvas.length) {
-            console.log((Math.floor(clickX.length / 500) + 1) + " deleteCanvas " + arrayCanvas.length);
-            console.log("deleteCanvas");
-
-            var test = deleteCanvas();
+            deleteCanvas();
         }
         this.draw();
     }
@@ -107,7 +109,8 @@ function Canvas(options) {
         clickDrag.push(dragging);
 
         pens.push(penManager.getCurrentNumber());
-        console.log(clickX.length);
+
+        //console.log(clickX.length);
         // Jedes Mal wenn 500 Schritte gezeichnet wurden, wird ein neues Canvas erstellt, um die Rechenoperatinen zu minimieren.
         if (clickX.length % 500 == 0)
         {
@@ -121,9 +124,15 @@ function Canvas(options) {
         drawDefaults(canvasToDraw);
 
         for (var i = canvasToDraw * 500; i < clickX.length; i++) {
-            arrayCanvas[canvasToDraw].ctx.beginPath();
-
             this.setPen( pens[i], canvasToDraw);
+
+            var drawF = function() {
+                eval(arrayCanvas[canvasToDraw].drawFunction);
+            };
+            drawF();
+
+            //drawFunction.call(this);
+            /*arrayCanvas[canvasToDraw].ctx.beginPath();
 
             if(clickDrag[i] && i) {
                 arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i-1], clickY[i-1]);
@@ -133,7 +142,7 @@ function Canvas(options) {
             }
             arrayCanvas[canvasToDraw].ctx.lineTo(clickX[i], clickY[i]);
             arrayCanvas[canvasToDraw].ctx.closePath();
-            arrayCanvas[canvasToDraw].ctx.stroke();
+            arrayCanvas[canvasToDraw].ctx.stroke();*/
         };
     }
 
@@ -218,9 +227,6 @@ function Canvas(options) {
 
         arrayCanvas.pop();
     };
-    this.test = function() {
-    	alert("hi");
-    }
 
     return this.init();
 }

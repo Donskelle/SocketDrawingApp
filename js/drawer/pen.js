@@ -9,21 +9,12 @@ function Pen() {
     var drawingFunctions = new Array();
 
 
-    pens[currentPen] = {
-        strokeStyle : color,
-        lineJoin : lineArt,
-        lineWidth : width
-    };
+    
 
 
-    drawingFunctions[0] = return function () {
-
-
-        
-    }
-
-
-
+    //drawingFunctions[0] = function () {
+    //
+    //}
 
 
     this.init = function() {
@@ -35,9 +26,42 @@ function Pen() {
         Interaction.addOnChangeListener.apply(strokePicker, [setLineArt]);
         Interaction.addOnChangeListener.apply(widthPicker, [setLineWidth]);
 
+        initDrawingFunctions();
 
+
+        pens[currentPen] = {
+            strokeStyle : color,
+            lineJoin : lineArt,
+            lineWidth : width,
+            drawingFunction : drawingFunctions[0]
+        };
     }
 
+    function initDrawingFunctions() {
+        drawingFunctions[0] = "\
+            arrayCanvas[canvasToDraw].ctx.beginPath();\
+            if(clickDrag[i] && i) {\
+                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i-1], clickY[i-1]);\
+            }\
+            else {\
+                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i] -1, clickY[i]);\
+            }\
+            arrayCanvas[canvasToDraw].ctx.lineTo(clickX[i], clickY[i]);\
+            arrayCanvas[canvasToDraw].ctx.closePath();\
+            arrayCanvas[canvasToDraw].ctx.stroke()";
+
+        drawingFunctions[1] = function(ctx, x, y) {
+            for (var i = -10; i < 10; i+= 4) {
+                for (var j = -10; j < 10; j+= 4) {
+                    if (Math.random() > 0.5) {
+                        ctx.fillStyle = ['red', 'orange', 'yellow', 'green', 
+                                         'light-blue', 'blue', 'purple'][HelpFunction.getRandomInt(0,6)];
+                        ctx.fillRect(x+i, y+j, 4, 4);
+                    }
+                }
+            }
+        };
+    }
         
 
    	
@@ -71,12 +95,19 @@ function Pen() {
         changePen = true;
     };
 
+    function setDrawingFunction(paraDrawingFunction) {
+        if(typeof paraDrawingFunction === "object")
+            width = widthPicker.value;
+        else
+            width = paraDrawingFunction;
+
+        changePen = true;
+    }
+
 
     this.getPen = function(i) {
-        console.log(pens[i]);
         return pens[i];
     };
-
 
     this.rebuild = function() {
         pens.length = 0;
@@ -85,7 +116,8 @@ function Pen() {
         pens[currentPen] = {
             strokeStyle : setColor({}),
             lineJoin : setLineArt({}),
-            lineWidth : setLineWidth({})
+            lineWidth : setLineWidth({}),
+            drawingFunction : drawingFunctions[0]
         };
 
     }
@@ -97,9 +129,10 @@ function Pen() {
         	currentPen = currentPen + 1;
 
             pens[currentPen] = {
-                    strokeStyle : color,
-                    lineJoin : lineArt,
-                    lineWidth : width
+                strokeStyle : color,
+                lineJoin : lineArt,
+                lineWidth : width,
+                drawingFunction : drawingFunctions[0]
             };
             changePen = false;
         }
