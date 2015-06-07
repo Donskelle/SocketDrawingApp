@@ -17,10 +17,12 @@
 			<a href="#" class="iconLine" id="closeDrawOperations"><span class="glyphicon glyphicon-arrow-right"></span></a>
 		</div>
 		<div class="floating paintOptions">
+			<p class="penSelectorLabel">Stifte: </label>
 			<div id="penSelector">
 				
 			</div>
-
+			
+			<label for="widthPicker">Stiftbreite: </label>
 			<select class="penOptions" name="strokeWidth" id="widthPicker">
 				<option value="10">10px</option>
 				<option value="15" selected>15px</option>
@@ -28,14 +30,17 @@
 				<option value="30">30px</option>
 			</select>
 
+			
 			<a href="#" id="revert">Operation zurück</a>
 
+			<label for="strokePicker">Zeichenart:</label>
 			<select name="lineJoin" id="strokePicker">
 				<option value="round" selected>rund</option>
 				<option value="bevel">glatt</option>
 				<option value="miter">eckig</option>
 			</select>
 
+			<label for="colorPicker">Farben wählen:</label>
 			<input type="color" name="color" id="colorPicker">
 			</input>
 		</div>

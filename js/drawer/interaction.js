@@ -61,7 +61,6 @@ function Interaction() {
             fields[textareas[i].name] = textareas[i].value;
         };
         //this.reset();
-        console.log(fields);
         return fields;
     }
 

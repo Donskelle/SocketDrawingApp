@@ -52,10 +52,11 @@ a.iconLine, a.iconLine:visited {
 }
 .mainOptionsWrapper {
 	position: fixed;
-	top:0;
-	left: 0;
-		
-
+	top:5px;
+	left: 15px;
+}
+.mainOptionsWrapper a {
+	margin-right: 10px;
 }
 
 .mainOptionsWrapper.visible .mainOptionsMenu {
@@ -104,8 +105,18 @@ a.iconLine, a.iconLine:visited {
 }
 
 
-.paintOptions .pen a.active{
+.paintOptions a.active{
 	font-weight: bold;
+}
+.paintOptions .penSelectorLabel, .paintOptions label, .paintOptions #revert {
+	margin-top: 20px;
+	display: block;
+}
+.paintOptions *:first-child {
+	margin-top: 0;
+}
+.paintOptions #penSelector a{
+	display: block;
 }
 
 /**
@@ -144,12 +155,7 @@ canvas {
 button {
 }
 a, a:visited {
-	display: inline-block;
-	height: 30px;
-	color:blue;
-	line-height: 30px;
-	padding: 0 15px;
-	background: #a0a0a0;
+
 }
 a:hover {
 	

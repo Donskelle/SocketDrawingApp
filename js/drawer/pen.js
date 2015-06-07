@@ -28,9 +28,9 @@ function Pen() {
             var textNote = document.createTextNode(drawingFunctions[i].name);
             ele.appendChild(textNote);
             ele.setAttribute("id", "pen"+i);
+            ele.setAttribute("href", "#");
             applyElement.appendChild(ele);
             ele.addEventListener("click", function(e) {
-                console.log(e);
                 setDrawingFunction(e.target.attributes.id.value);
             });
         };
@@ -42,9 +42,12 @@ function Pen() {
             lineWidth : width,
             drawingFunction : drawingFunctions[0].function
         };
+        HelpFunction.toggleClassName(document.getElementById("pen0"), true, "active");
+
     }
 
     function initDrawingFunctions() {
+
         drawingFunctions[0] = {};
         drawingFunctions[0].name = "Standart Maler";
         drawingFunctions[0].function = function(ctx, clickX, clickY, clickDrag, i) {
@@ -59,12 +62,30 @@ function Pen() {
             ctx.closePath();
             ctx.stroke();
         };
+
+
         drawingFunctions[1] = {};
         drawingFunctions[1].name = "Random Maler";
         drawingFunctions[1].function = function(ctx, clickX, clickY, clickDrag, i) {
-            //console.log(ctx);
-            for (var j = -10; j < 10; j+= 4) {
-                for (var k = -10; k < 10; k+= 4) {
+            
+            for (var j = -(ctx.lineWidth / 2); j < (ctx.lineWidth / 2); j+= 4) {
+                for (var k = -(ctx.lineWidth / 2); k < (ctx.lineWidth / 2); k+= 4) {
+                    if (Math.random() > 0.5) {
+                        ctx.fillStyle = ['red', 'orange', 'yellow', 'green', 
+                                         'light-blue', 'blue', 'purple'][HelpFunction.getRandomInt(0,6)];
+                        ctx.fillRect(clickX[i]+j, clickY[i]+k, 4, 4);
+                    }
+                }
+            }
+        };
+
+
+        drawingFunctions[2] = {};
+        drawingFunctions[2].name = "Random Maler";
+        drawingFunctions[2].function = function(ctx, clickX, clickY, clickDrag, i) {
+            
+            for (var j = -(ctx.lineWidth / 2); j < (ctx.lineWidth / 2); j+= 4) {
+                for (var k = -(ctx.lineWidth / 2); k < (ctx.lineWidth / 2); k+= 4) {
                     if (Math.random() > 0.5) {
                         ctx.fillStyle = ['red', 'orange', 'yellow', 'green', 
                                          'light-blue', 'blue', 'purple'][HelpFunction.getRandomInt(0,6)];
@@ -74,8 +95,6 @@ function Pen() {
             }
         };
     }
-        
-
    	
     function setColor (paraColor) {
     	// Wenn durch das Change Event ausgelöst wird, wird der Wert aus dem colorPicker genommen.
@@ -108,13 +127,18 @@ function Pen() {
     };
 
     function setDrawingFunction(id) {
-        console.log(id);
-        i = parseInt(id.replace("pen", ""));
+        var i = parseInt(id.replace("pen", ""));
         if (currentDrawingFunction != i)
         {   
             currentDrawingFunction = i;
             changePen = true;
-        }        
+
+            var prePen = document.querySelector(".active");
+            if(prePen != null)
+                HelpFunction.toggleClassName(prePen, false, "active");
+
+            HelpFunction.toggleClassName(document.getElementById(id), true, "active");
+        }
     }
 
 

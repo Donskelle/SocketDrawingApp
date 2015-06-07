@@ -13,7 +13,6 @@ function Canvas(options) {
 
 
     this.init = function() {
-        
     	addCanvas();
 
         this.offsetWrapper();
@@ -25,7 +24,6 @@ function Canvas(options) {
         if(arrayCanvas[canvasId].currentPen == penNumber)
             return;
 
-        
         var options = penManager.getPen(penNumber);
         arrayCanvas[canvasId].ctx.strokeStyle = options.strokeStyle;
         arrayCanvas[canvasId].ctx.lineJoin = options.lineJoin;
@@ -62,18 +60,20 @@ function Canvas(options) {
                 clickX.pop();
                 clickY.pop();
                 clickDrag.pop();
+                pens.pop()
             }
             // 1. Click der Move Bewegung wird nicht als Drag interpretiert
             // Deshalb wird es hier zusätzlich zum Drag entfernt
             clickX.pop();
             clickY.pop();
             clickDrag.pop();
-
+            pens.pop()
         }
         else {
             clickX.pop();
             clickY.pop();
             clickDrag.pop();
+            pens.pop()
         }
 
         //

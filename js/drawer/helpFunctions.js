@@ -48,16 +48,16 @@ function HelpFunction() {
 		}
 		
 		var open = function () {
-			toggleClassName(visibleAttachElement, true, "visible");
+			HelpFunction.toggleClassName(visibleAttachElement, true, "visible");
 		}
 		var close = function () {
-			toggleClassName(visibleAttachElement, false, "visible");
+			HelpFunction.toggleClassName(visibleAttachElement, false, "visible");
 		}
 		init();
 		//showMenu();
 	}
 
-	function toggleClassName (ele, visbility, toggleName) {
+	this.toggleClassName = function(ele, visbility, toggleName) {
 	    var className = ' ' + ele.className + ' ';
 
 	    if (visbility == false && ~className.indexOf(' ' + toggleName + ' ') ) {
@@ -71,19 +71,5 @@ function HelpFunction() {
 	this.getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-
-	this.saveToLocalStorage = function(data) {
-		localStorage.setItem("drawerImage", data);
-	}
-
-	this.getLocalStorageImage = function() {
-		getLocalStorageImage;
-	}
-
-	this.inform = function(data) {
-		alert(data);
-	}
-
-
 
 }).call(HelpFunction);

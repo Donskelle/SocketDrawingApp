@@ -15,6 +15,7 @@ function Drawing(_optionsPara) {
     var canvasManager;
     options = HelpFunction.merge(options, _optionsPara);
     var canvasManager = new Canvas(options);
+    var communication = new Communicator();
 
 
 	this.init = function() {
@@ -62,7 +63,7 @@ function Drawing(_optionsPara) {
 
                 var fReader = new FileReader();
                 fReader.readAsDataURL(input.files[0]);
-                console.log(input.files[0]);
+                
                 fReader.onloadend = function(event){
                     options.backgroundImage = new Image();
                     options.backgroundImage.src = event.target.result;
