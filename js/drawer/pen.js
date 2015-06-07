@@ -9,14 +9,6 @@ function Pen() {
     var drawingFunctions = new Array();
 
 
-    
-
-
-    //drawingFunctions[0] = function () {
-    //
-    //}
-
-
     this.init = function() {
         var colorPicker = document.getElementById("colorPicker");
         var strokePicker = document.getElementById("strokePicker");
@@ -28,35 +20,55 @@ function Pen() {
 
         initDrawingFunctions();
 
+        var applyElement = document.getElementById("penSelector");
+
+        for (var i = 0; i < drawingFunctions.length; i++) {
+            var ele = document.createElement("a");
+            var number = i;
+            var textNote = document.createTextNode(drawingFunctions[i].name);
+            ele.appendChild(textNote);
+            ele.setAttribute("id", "pen"+i);
+            applyElement.appendChild(ele);
+            ele.addEventListener("click", function(e) {
+                console.log(e);
+                setDrawingFunction(e.target.attributes.id.value);
+            });
+        };
+
 
         pens[currentPen] = {
             strokeStyle : color,
             lineJoin : lineArt,
             lineWidth : width,
-            drawingFunction : drawingFunctions[0]
+            drawingFunction : drawingFunctions[0].function
         };
     }
 
     function initDrawingFunctions() {
-        drawingFunctions[0] = "\
-            arrayCanvas[canvasToDraw].ctx.beginPath();\
-            if(clickDrag[i] && i) {\
-                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i-1], clickY[i-1]);\
-            }\
-            else {\
-                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i] -1, clickY[i]);\
-            }\
-            arrayCanvas[canvasToDraw].ctx.lineTo(clickX[i], clickY[i]);\
-            arrayCanvas[canvasToDraw].ctx.closePath();\
-            arrayCanvas[canvasToDraw].ctx.stroke()";
-
-        drawingFunctions[1] = function(ctx, x, y) {
-            for (var i = -10; i < 10; i+= 4) {
-                for (var j = -10; j < 10; j+= 4) {
+        drawingFunctions[0] = {};
+        drawingFunctions[0].name = "Standart Maler";
+        drawingFunctions[0].function = function(ctx, clickX, clickY, clickDrag, i) {
+            ctx.beginPath();
+            if(clickDrag[i] && i) {
+                ctx.moveTo(clickX[i-1], clickY[i-1]);
+            }
+            else {
+                ctx.moveTo(clickX[i] -1, clickY[i]);
+            }
+            ctx.lineTo(clickX[i], clickY[i]);
+            ctx.closePath();
+            ctx.stroke();
+        };
+        drawingFunctions[1] = {};
+        drawingFunctions[1].name = "Random Maler";
+        drawingFunctions[1].function = function(ctx, clickX, clickY, clickDrag, i) {
+            //console.log(ctx);
+            for (var j = -10; j < 10; j+= 4) {
+                for (var k = -10; k < 10; k+= 4) {
                     if (Math.random() > 0.5) {
                         ctx.fillStyle = ['red', 'orange', 'yellow', 'green', 
                                          'light-blue', 'blue', 'purple'][HelpFunction.getRandomInt(0,6)];
-                        ctx.fillRect(x+i, y+j, 4, 4);
+                        ctx.fillRect(clickX[i]+j, clickY[i]+k, 4, 4);
                     }
                 }
             }
@@ -95,13 +107,14 @@ function Pen() {
         changePen = true;
     };
 
-    function setDrawingFunction(paraDrawingFunction) {
-        if(typeof paraDrawingFunction === "object")
-            width = widthPicker.value;
-        else
-            width = paraDrawingFunction;
-
-        changePen = true;
+    function setDrawingFunction(id) {
+        console.log(id);
+        i = parseInt(id.replace("pen", ""));
+        if (currentDrawingFunction != i)
+        {   
+            currentDrawingFunction = i;
+            changePen = true;
+        }        
     }
 
 
@@ -117,7 +130,7 @@ function Pen() {
             strokeStyle : setColor({}),
             lineJoin : setLineArt({}),
             lineWidth : setLineWidth({}),
-            drawingFunction : drawingFunctions[0]
+            drawingFunction : drawingFunctions[currentDrawingFunction].function
         };
 
     }
@@ -132,7 +145,7 @@ function Pen() {
                 strokeStyle : color,
                 lineJoin : lineArt,
                 lineWidth : width,
-                drawingFunction : drawingFunctions[0]
+                drawingFunction : drawingFunctions[currentDrawingFunction].function
             };
             changePen = false;
         }
@@ -141,7 +154,7 @@ function Pen() {
 
 
     this.getDrawingFunction = function(i) {
-        return drawingFunction[i];
+        return drawingFunction[i].function;
     }
 
 

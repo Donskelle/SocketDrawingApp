@@ -34,8 +34,6 @@ function Canvas(options) {
 
         arrayCanvas[canvasId].currentPen = penNumber;
         arrayCanvas[canvasId].drawFunction = options.drawingFunction;
-
-        console.log(arrayCanvas[canvasId].drawFunction);
     }
 
 
@@ -53,26 +51,8 @@ function Canvas(options) {
             deleteCanvas();
         }
 
-
-        if(options.backgroundImage != null && options.backgroundImage != "")
-        {
-            var that = this;
-            var input =  document.getElementById("fileUpload");
-
-            var fReader = new FileReader();
-            fReader.readAsDataURL(input.files[0]);
-            fReader.onloadend = function(event){
-                options.backgroundImage = new Image();
-                options.backgroundImage.src = event.target.result;
-                
-                addCanvas();
-                that.offsetWrapper();
-            }
-        }
-        else {
-            addCanvas(); 
-            this.offsetWrapper();
-        }
+        addCanvas(); 
+        this.offsetWrapper();
     }
 
     this.revert = function() {
@@ -100,7 +80,7 @@ function Canvas(options) {
         while((Math.floor(clickX.length / 500) + 1) < arrayCanvas.length) {
             deleteCanvas();
         }
-        this.draw();
+        this.drawAll();
     }
 
     this.addClick = function(x, y, dragging) {
@@ -110,7 +90,6 @@ function Canvas(options) {
 
         pens.push(penManager.getCurrentNumber());
 
-        //console.log(clickX.length);
         // Jedes Mal wenn 500 Schritte gezeichnet wurden, wird ein neues Canvas erstellt, um die Rechenoperatinen zu minimieren.
         if (clickX.length % 500 == 0)
         {
@@ -118,7 +97,7 @@ function Canvas(options) {
         }
     }
 
-    this.draw = function() {
+    this.drawAll = function() {
         var canvasToDraw = Math.floor(clickX.length/500);
 
         drawDefaults(canvasToDraw);
@@ -126,29 +105,20 @@ function Canvas(options) {
         for (var i = canvasToDraw * 500; i < clickX.length; i++) {
             this.setPen( pens[i], canvasToDraw);
 
-            var drawF = function() {
-                eval(arrayCanvas[canvasToDraw].drawFunction);
-            };
-            drawF();
-
-            //drawFunction.call(this);
-            /*arrayCanvas[canvasToDraw].ctx.beginPath();
-
-            if(clickDrag[i] && i) {
-                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i-1], clickY[i-1]);
-            }
-            else {
-                arrayCanvas[canvasToDraw].ctx.moveTo(clickX[i] -1, clickY[i]);
-            }
-            arrayCanvas[canvasToDraw].ctx.lineTo(clickX[i], clickY[i]);
-            arrayCanvas[canvasToDraw].ctx.closePath();
-            arrayCanvas[canvasToDraw].ctx.stroke();*/
+            arrayCanvas[canvasToDraw].drawFunction(arrayCanvas[canvasToDraw].ctx, clickX, clickY, clickDrag, i);
         };
     }
 
-    this.save = function() {
-        var images = [];
+    this.drawLast = function() {
+        var canvasToDraw = Math.floor(clickX.length/500);
+        var i = clickX.length - 1;
 
+        this.setPen( pens[i], canvasToDraw);
+        arrayCanvas[canvasToDraw].drawFunction(arrayCanvas[canvasToDraw].ctx, clickX, clickY, clickDrag, i);
+    }
+
+    this.getDataUrl = function() {
+        var images = [];
 
         for (var i = 0; i < arrayCanvas.length; i++) {
             images[i] = arrayCanvas[i].canvas.toDataURL('image/png');

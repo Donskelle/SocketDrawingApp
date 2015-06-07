@@ -48,29 +48,42 @@ function HelpFunction() {
 		}
 		
 		var open = function () {
-			showMenu(true);
+			toggleClassName(visibleAttachElement, true, "visible");
 		}
 		var close = function () {
-			showMenu(false);
-		}
-
-		function showMenu (visible) {
-		    var className = ' ' + visibleAttachElement.className + ' ';
-
-		    if (visible == false && ~className.indexOf(' visible ') ) {
-		        visibleAttachElement.className = className.replace(' visible ', ' ');
-		    } 
-		    else if(visible == true){
-		        visibleAttachElement.className += ' visible';
-		    }
-
+			toggleClassName(visibleAttachElement, false, "visible");
 		}
 		init();
 		//showMenu();
 	}
 
-	function getRandomInt(min, max) {
+	function toggleClassName (ele, visbility, toggleName) {
+	    var className = ' ' + ele.className + ' ';
+
+	    if (visbility == false && ~className.indexOf(' ' + toggleName + ' ') ) {
+	        ele.className = className.replace(' ' + toggleName + ' ', ' ');
+	    } 
+	    else if(visbility == true){
+	        ele.className += ' ' + toggleName;
+	    }
+	}
+
+	this.getRandomInt = function(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
+
+	this.saveToLocalStorage = function(data) {
+		localStorage.setItem("drawerImage", data);
+	}
+
+	this.getLocalStorageImage = function() {
+		getLocalStorageImage;
+	}
+
+	this.inform = function(data) {
+		alert(data);
+	}
+
+
 
 }).call(HelpFunction);

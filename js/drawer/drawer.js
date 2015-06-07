@@ -7,8 +7,10 @@ function Drawing(_optionsPara) {
 		backgroundImage: null,
 		canvasWrapper: "canvasWrapper",
         revertLink: "revert",
-        saveLink: "save",
-        name: "canvasDrawer"
+        downloadLink: "downloadLink",
+        storeLink: "storeLink",
+        name: "canvasDrawer",
+
 	};
     var canvasManager;
     options = HelpFunction.merge(options, _optionsPara);
@@ -26,6 +28,22 @@ function Drawing(_optionsPara) {
             canvasManager.offsetWrapper();
         }, true);
 
+        var canvasAsdataURL;
+        canvasAsdataURL = localStorage.getItem("drawerImage");
+        if (canvasAsdataURL != null) {
+            var response = confirm("Bild gefunden. Möchten Sie es Laden?");
+            if(response == true)
+            {
+                options.backgroundImage = new Image();
+                options.backgroundImage.src = canvasAsdataURL;
+
+                options.width = options.backgroundImage.width;
+                options.height = options.backgroundImage.height;
+
+                canvasManager.rebuild(options);
+            }
+        }
+
 
         /**
          * Neues Canvas erstellen
@@ -34,18 +52,43 @@ function Drawing(_optionsPara) {
         Interaction.addSubmitListener.apply(formCreateCanvas, [function (e) {
             var fields = Interaction.readForm.apply(formCreateCanvas);
             options = HelpFunction.merge(options, fields);
-            console.log(options)
+
             HelpFunction.closeLightbox();
-            canvasManager.rebuild(options);
+
+            if(fields.backgroundImage != null && fields.backgroundImage != "")
+            {
+                var that = this;
+                var input =  document.getElementById("fileUpload");
+
+                var fReader = new FileReader();
+                fReader.readAsDataURL(input.files[0]);
+                console.log(input.files[0]);
+                fReader.onloadend = function(event){
+                    options.backgroundImage = new Image();
+                    options.backgroundImage.src = event.target.result;
+                    
+                    canvasManager.rebuild(options);
+                }
+            }
+            else {
+                canvasManager.rebuild(options);
+            }
 
             document.getElementById("formCreateCanvas").reset();
         }]);
 
 
-        var saveButton = document.getElementById(options.saveLink);
+        var saveButton = document.getElementById(options.storeLink);
         saveButton.addEventListener('click', function(e) {
-            saveButton.attributes.download = options.name + ".png";
-            saveButton.href = canvasManager.save(); 
+            localStorage.setItem("drawerImage", canvasManager.getDataUrl());
+            alert("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+        }, true);
+
+
+        var downloadButton = document.getElementById(options.downloadLink);
+        downloadButton.attributes.download = options.name + ".png";
+        downloadButton.addEventListener('click', function(e) {
+            downloadButton.href = canvasManager.getDataUrl(); 
         }, true);
 
 
@@ -59,7 +102,7 @@ function Drawing(_optionsPara) {
 
         Interaction.addMouseDownListener.apply(canvasWrapper, [function (e) {
             canvasManager.addClick(e.x, e.y, false);
-            canvasManager.draw();
+            canvasManager.drawLast();
             paint = true;
         }]);
 
@@ -68,7 +111,7 @@ function Drawing(_optionsPara) {
             if(paint)
             {
                 canvasManager.addClick(e.x, e.y, true);
-                canvasManager.draw();
+                canvasManager.drawLast();
             }
         }]);
 
