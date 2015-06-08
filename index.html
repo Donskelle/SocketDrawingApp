@@ -17,7 +17,7 @@
 			<a href="#" class="iconLine" id="closeDrawOperations"><span class="glyphicon glyphicon-arrow-right"></span></a>
 		</div>
 		<div class="floating paintOptions">
-			<p class="penSelectorLabel">Stifte: </label>
+			<p class="penSelectorLabel">Stifte: </p>
 			<div id="penSelector">
 				
 			</div>
@@ -41,8 +41,7 @@
 			</select>
 
 			<label for="colorPicker">Farben wählen:</label>
-			<input type="color" name="color" id="colorPicker">
-			</input>
+			<input type="color" name="color" id="colorPicker"/>
 		</div>
 	</div>
 
@@ -56,12 +55,7 @@
 			
 			<label for="groupSelection">Gruppe auswählen</label>
 			<select id="groupSelection">
-				<option></option>
-				<option>Gruppe 1</option>
-				<option>Gruppe 2</option>
-				<option>Gruppe 3</option>
-				<option>Gruppe 4</option>
-				<option>Gruppe 5</option>
+				<option>Keine</option>
 			</select>
 		</div>
 
@@ -76,14 +70,14 @@
 			<h1>Neue Zeichnung</h1>
 			<form id="formCreateCanvas">
 				<label for="canvasName">Name</label>
-				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name">
+				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name"/>
 				<label for="canvasHeight">Breite Canvas</label>
-				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width">
+				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width"/>
 				<label for="canvasHeight">Höhe Canvas</label>
-				<input type="text" value="" required placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height">
+				<input type="text" value="" required placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height"/>
 				<label for="fileUpload">Bild hochladen</label>
-				<input type="file" id="fileUpload" name="backgroundImage"></input>
-				<button href="#" id="buttonCreate">Erstellen</button>
+				<input type="file" id="fileUpload" name="backgroundImage"/>
+				<button id="buttonCreate">Erstellen</button>
 				<a href="#closeLightBox">Schließen</a>
 			</form>
 		</div>
@@ -93,22 +87,22 @@
 		<div class="lightboxContent">
 			<h1>Neue Gruppe</h1>
 			<form id="formCreateGroup">
-				<input type="text" placeholder="Gruppen Name" id="groupName">
+				<input type="text" placeholder="Gruppen Name"name="groupName" required>
 				<div class="row">
-					<a href="#">Erstellen</a>
+					<button>Erstellen</button>
 				</div>
 				<div class="row">
 					<a href="#closeLightBox">Schließen</a>
-				<div>
+				</div>
 			</form>
 		</div>
 	</div>
-
 	<a id="closeLightbox" href="#closeLightbox"></a>
 
+	<script src="js/drawer/customElement.js"></script>
 	<script src="js/drawer/helpFunctions.js"></script>
 	<script src="js/drawer/communication.js"></script>
-
+	
 	<script src="js/drawer/interaction.js"></script>
 	<script src="js/drawer/pen.js"></script>
 	<script src="js/drawer/canvas.js"></script>

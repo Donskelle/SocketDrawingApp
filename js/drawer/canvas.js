@@ -1,7 +1,7 @@
 "use strict";
 
 function Canvas(options) {
-	var offset = {};
+	
     var arrayCanvas = new Array();
 
     var clickX = new Array();
@@ -15,7 +15,6 @@ function Canvas(options) {
     this.init = function() {
     	addCanvas();
 
-        this.offsetWrapper();
         return this;
     }
 
@@ -25,6 +24,8 @@ function Canvas(options) {
             return;
 
         var options = penManager.getPen(penNumber);
+        console.log("options");
+        console.log(options);
         arrayCanvas[canvasId].ctx.strokeStyle = options.strokeStyle;
         arrayCanvas[canvasId].ctx.lineJoin = options.lineJoin;
         arrayCanvas[canvasId].ctx.lineWidth =  options.lineWidth;
@@ -32,6 +33,9 @@ function Canvas(options) {
 
         arrayCanvas[canvasId].currentPen = penNumber;
         arrayCanvas[canvasId].drawFunction = options.drawingFunction;
+
+        if(typeof arrayCanvas[canvasId].drawFunction != "function")
+            arrayCanvas[canvasId].drawFunction = penManager.getFunction(options.drawingFunctionsI);
     }
 
 
@@ -50,7 +54,6 @@ function Canvas(options) {
         }
 
         addCanvas(); 
-        this.offsetWrapper();
     }
 
     this.revert = function() {
@@ -84,8 +87,8 @@ function Canvas(options) {
     }
 
     this.addClick = function(x, y, dragging) {
-        setX( x - offset.X );
-        setY( y - offset.Y );
+        setX( x );
+        setY( y );
         clickDrag.push(dragging);
 
         pens.push(penManager.getCurrentNumber());
@@ -95,6 +98,36 @@ function Canvas(options) {
         {
             addCanvas();
         }
+        this.drawLast();
+    }
+
+    this.getPenToSend = function() {
+        var pena = penManager.getPen(pens[pens.length - 1]);
+        delete pena.drawingFunction;
+        console.log("pena")
+        console.log(pena)
+        return pena;
+    }
+
+
+    this.addClickPen = function(x, y, dragging, strokeStyle, lineJoin, lineWidth, drawingFunctionsI) {
+        setX( x );
+        setY( y );
+        clickDrag.push(dragging);
+
+        var oldNumber = penManager.getCurrentNumber();
+        pens.push(penManager.addPen(strokeStyle, lineJoin, lineWidth, drawingFunctionsI));
+
+        // Jedes Mal wenn 500 Schritte gezeichnet wurden, wird ein neues Canvas erstellt, um die Rechenoperatinen zu minimieren.
+        if (clickX.length % 500 == 0)
+        {
+            addCanvas();
+        }
+        this.drawLast();
+
+        var canvasToDraw = Math.floor(clickX.length/500);
+
+        penManager.setCurrentPen(oldNumber);
     }
 
     this.drawAll = function() {
@@ -149,14 +182,7 @@ function Canvas(options) {
     };
 
 
-    this.offsetWrapper = function() {
-        var wrapper = document.getElementById(options.canvasWrapper);
-
-        wrapper.style.marginTop = ((window.innerHeight - options.height) / 2) + "px";
-
-        offset.Y = wrapper.offsetTop;
-        offset.X = wrapper.offsetLeft;
-    };
+ 
 
 
     var setX = function (x) {

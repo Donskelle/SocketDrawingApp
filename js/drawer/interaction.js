@@ -9,6 +9,7 @@ function Interaction() {
     this.makeCallback = function(callback) {
         return function(e) {
             callback(e);
+            e.preventDefault();
         };
     }
 
@@ -34,6 +35,10 @@ function Interaction() {
     this.addMouseLeaveListener = function(callback) {
         Interaction.addListener.apply(this, ["mouseleave", callback]);
         Interaction.addListener.apply(this, ["touchcancel", callback]);
+    }
+
+    this.addMessageListener = function(callback) {
+        Interaction.addListener.apply(this, ["newMessage", callback]);
     }
 
     this.addSubmitListener = function(callback) {

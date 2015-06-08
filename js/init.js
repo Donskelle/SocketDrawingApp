@@ -1,4 +1,4 @@
-
+function init() {
 	var drawing = new Drawing({});
 
 
@@ -22,15 +22,5 @@
 	for (var i = lightboxWrapper.length - 1; i >= 0; i--) {
 		Interaction.addClickListener.apply(lightboxWrapper[i], [HelpFunction.closeLightbox]);
 	};
-
-	/**
-	 * Neue Gruppe erstellen
-	 */
-	var formCreateGroup = document.getElementById("formCreateGroup");
-	Interaction.addSubmitListener.apply(formCreateGroup, [function (e) {
-		var fields = Interaction.readForm.apply(formCreateGroup);
-		HelpFunctions.closeLightbox();
-		formCreateGroup.reset();
-	}]);
-
-
+}
+window.addEventListener('DOMContentLoaded', init, false);

@@ -40,10 +40,16 @@ function Pen() {
             strokeStyle : color,
             lineJoin : lineArt,
             lineWidth : width,
-            drawingFunction : drawingFunctions[0].function
+            drawingFunction : drawingFunctions[currentDrawingFunction].function,
+            drawingFunctionsI : currentDrawingFunction
         };
         HelpFunction.toggleClassName(document.getElementById("pen0"), true, "active");
 
+    }
+
+    this.getFunction = function(i) {
+
+        return drawingFunctions[i].function;
     }
 
     function initDrawingFunctions() {
@@ -143,6 +149,8 @@ function Pen() {
 
 
     this.getPen = function(i) {
+        console.log(pens);
+        console.log(i);
         return pens[i];
     };
 
@@ -154,27 +162,48 @@ function Pen() {
             strokeStyle : setColor({}),
             lineJoin : setLineArt({}),
             lineWidth : setLineWidth({}),
-            drawingFunction : drawingFunctions[currentDrawingFunction].function
+            drawingFunction : drawingFunctions[currentDrawingFunction].function,
+            drawingFunctionsI : currentDrawingFunction
         };
-
     }
-    
+
+    this.addPen = function(_strokeStyle, _lineJoin, _lineWidth, _drawingFunctions) {
+        currentPen = pens.length;
+
+        console.log(_strokeStyle + " " + _lineJoin + " " + _lineWidth + " " + _drawingFunctions)
+        pens[currentPen] = {
+            strokeStyle : _strokeStyle,
+            lineJoin : _lineJoin,
+            lineWidth : _lineWidth,
+            drawingFunction : drawingFunctions[_drawingFunctions].function,
+            drawingFunctionsI : _drawingFunctions
+        };
+        console.log("new pen");
+        console.log(pens[currentPen]);
+        return currentPen;
+    }
 
     this.getCurrentNumber = function() {
         if (changePen === true)
         {
-        	currentPen = currentPen + 1;
+        	currentPen = pens.length;
 
             pens[currentPen] = {
                 strokeStyle : color,
                 lineJoin : lineArt,
                 lineWidth : width,
-                drawingFunction : drawingFunctions[currentDrawingFunction].function
+                drawingFunction : drawingFunctions[currentDrawingFunction].function,
+                drawingFunctionsI : currentDrawingFunction
+
             };
             changePen = false;
         }
         return currentPen;
     };
+
+    this.setCurrentPen = function(i) {
+        currentPen = i;
+    }
 
 
     this.getDrawingFunction = function(i) {
