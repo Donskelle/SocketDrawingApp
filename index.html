@@ -69,7 +69,7 @@
 		<div class="lightboxContent">
 			<h1>Neue Zeichnung</h1>
 			<form id="formCreateCanvas">
-				<label for="canvasName">Name</label>
+				<label for="canvasName" maxlength="10">Name</label>
 				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name"/>
 				<label for="canvasHeight">Breite Canvas</label>
 				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width"/>
@@ -87,7 +87,7 @@
 		<div class="lightboxContent">
 			<h1>Neue Gruppe</h1>
 			<form id="formCreateGroup">
-				<input type="text" placeholder="Gruppen Name"name="groupName" required>
+				<input type="text" placeholder="Gruppen Name"name="groupName" maxlength="6" required>
 				<div class="row">
 					<button>Erstellen</button>
 				</div>

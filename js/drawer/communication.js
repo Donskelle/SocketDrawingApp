@@ -12,25 +12,25 @@ function Communicator() {
             ws = new WebSocket("ws://" + url);
 
             ws.onopen = function() {
-                notifi("Verbunden mit Server");
+                notifier.setContent("Verbunden mit Server");
                 
+                /**
+                 * Bestehende Gruppen abrufen
+                 */
                 that.sendMessage("getGroups", "", "");
             };
             ws.onmessage = function(e) {
+                console.log(e.data);
                 readData(e.data);
             };
             ws.onclose = function() {
-                console.log("Verbindung beendet, readyState: " + this.readyState);
+                notifier.setContent("Verbindung beendet");
             };
         } 
         catch(e) {
             console.log(e.message);
         }
 	};
-
-    var notifi = function(string) {
-        notifier.setContent(string);
-    }
 
     this.sendMessage = function(operation, message, group) {
         ws.send(this.decodePrivat(operation, message, group));
@@ -95,9 +95,10 @@ function Communicator() {
             "kennung" : decode(kennung),
             "message" : decode(message),
             "operation" : decode(operation),
-            "group" : decode(group),
             "from" : decode(userNumber)
         }
+        if(typeof group != "undefined" )
+            json.group = decode(group);
 
         return JSON.stringify(json);
     }
@@ -117,9 +118,11 @@ function Communicator() {
     function encode(word) {
 
         var newMessage = "";
-        for(var i = 0; i < word.length; i++)
-        {
-            newMessage += String.fromCharCode(word.charCodeAt(i) - 12);
+        if(typeof word != "undefined") {
+            for(var i = 0; i < word.length; i++)
+            {
+                newMessage += String.fromCharCode(word.charCodeAt(i) - 12);
+            }
         }
 
         return newMessage;
@@ -131,8 +134,8 @@ function Communicator() {
             data.operation = encode(data.operation);
             data.message = encode(data.message);
 
-
-            data.group = encode(data.group);
+            if(typeof data.group != undefined)
+                data.group = encode(data.group);
             data.from = encode(data.from);
         }
     }

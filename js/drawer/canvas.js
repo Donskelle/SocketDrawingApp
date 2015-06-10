@@ -17,7 +17,24 @@ function Canvas(options) {
 
         return this;
     }
+    
+    this.getClickPen = function(i) {
+        var response = {};
+        var pena = this.getPenToSend(i);
 
+        response.x = clickX[i];
+        response.y = clickY[i];
+        response.drag = clickDrag[i];
+        response.strokeStyle = pena.strokeStyle;
+        response.lineJoin = pena.lineJoin;
+        response.lineWidth = pena.lineWidth;
+        response.drawingI = pena.drawingFunctionsI;
+        return response;
+    }
+
+    this.getClickCount = function() {
+        return clickX.length;
+    }
 
     this.setPen = function(penNumber, canvasId) {
         if(arrayCanvas[canvasId].currentPen == penNumber)
@@ -101,11 +118,14 @@ function Canvas(options) {
         this.drawLast();
     }
 
-    this.getPenToSend = function() {
-        var pena = penManager.getPen(pens[pens.length - 1]);
+    this.getPenToSend = function(index) {
+        var pena
+        if(typeof index == "undefined")
+            pena = penManager.getPen(pens[pens.length - 1]);
+        else
+            pena = penManager.getPen(pens[index]);
+
         delete pena.drawingFunction;
-        console.log("pena")
-        console.log(pena)
         return pena;
     }
 

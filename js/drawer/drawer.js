@@ -19,6 +19,7 @@ function Drawing(_optionsPara) {
     var communication = new Communicator();
     var notifier = document.getElementsByTagName("x-notifier")[0];
     var userNumber = "";
+    var setUserToHear = null;
 
 
 
@@ -60,17 +61,22 @@ function Drawing(_optionsPara) {
                     if(options.groupName != null)
                         communication.sendMessage("setGroup", options.groupName, "");
                     break;
+                // Antwort auf verfügbare Gruppen
                 case "setGroup":
                     addGroup(e.detail.message, false);
                     break;
+                // Einfügen von Zeichenoperation, falls in der gleichen Gruppe
                 case "addClick":
                     if(e.detail.group == options.groupName){
                         e.detail.message = JSON.parse(e.detail.message);
                         console.log(e.detail);
                         canvasManager.addClickPen(e.detail.message.x, e.detail.message.y, e.detail.message.drag, e.detail.message.strokeStyle, e.detail.message.lineJoin, e.detail.message.lineWidth, e.detail.message.drawingI);
                     }
-                    break;                    
+                    break; 
+
                 case "joinGroup":
+                    notifier.setContent("User " + e.detail.from + " tritt bei");
+
                     if(e.detail.group == options.groupName)
                     {
                         var sendOptions = {
@@ -84,14 +90,62 @@ function Drawing(_optionsPara) {
                     break;
 
                 case "setGroupOptions":
-                    console.log("setGroupOptions");
+                    notifier.setContent(e.detail.group + " beigetreten");
+
+                    e.detail.message = JSON.parse(e.detail.message);
+                    console.log("setGroupOption");
                     console.log(e.detail);
+                    if(e.detail.message.to == userNumber && options.groupName == e.detail.group)
+                    {
+                        if(setUserToHear == null)
+                            setUserToHear = e.detail.from
+
+                        var sendOptions = {
+                            to: e.detail.from
+                        };
+                        options.width = e.detail.message.width;
+                        options.height = e.detail.message.height;
+                        options.backgroundImage = null;
+
+                        canvasManager.rebuild(options);
+
+
+                        communication.sendMessage("getClicksDone", JSON.stringify(sendOptions))
+                    }
+                    break;
+
+                case "getClicksDone":
                     e.detail.message = JSON.parse(e.detail.message);
                     if(e.detail.message.to == userNumber)
                     {
-                        options.width = e.detail.message.width;
-                        options.height = e.detail.message.height;
-                        canvasManager.rebuild(options);
+                        console.log("drinne")
+                        var sendOptions = {
+                            to: e.detail.from
+                        };
+
+                        var clicksCount = canvasManager.getClickCount();
+                        for (var i = 0; i < clicksCount; i++) {
+                            var clickPen = canvasManager.getClickPen(i);
+                            clickPen.to = e.detail.from;
+                            console.log("clickPen");
+                            console.log(clickPen);
+                            communication.sendMessage("setClicksDone", JSON.stringify(clickPen));
+                            console.log("send");
+                        };
+                    }
+                    break;
+
+                case "setClicksDone":
+                    e.detail.message = JSON.parse(e.detail.message);
+                    console.log(e.detail); 
+                    console.log("setClicksDone");
+                    console.log(e.detail);
+                    if(e.detail.message.to == userNumber)
+                    {
+                        console.log("setClicksDone drinne");
+                        console.log("setClicksDone drinne");
+                        console.log("setClicksDone drinne");
+                        canvasManager.addClickPen(e.detail.message.x, e.detail.message.y, e.detail.message.drag, e.detail.message.strokeStyle, e.detail.message.lineJoin, e.detail.message.lineWidth, e.detail.message.drawingI);
                     }
                     break;
 
@@ -178,6 +232,7 @@ function Drawing(_optionsPara) {
                 options.groupName = null;
             }
             else {
+                setUserToHear = null;
                 options.groupName = groupSelection.value;
                 communication.sendMessage("joinGroup", "", options.groupName);
             }
