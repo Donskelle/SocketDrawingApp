@@ -87,18 +87,10 @@ function Pen() {
 
 
         drawingFunctions[2] = {};
-        drawingFunctions[2].name = "Random Maler";
+        drawingFunctions[2].name = "Radierer";
         drawingFunctions[2].function = function(ctx, clickX, clickY, clickDrag, i) {
-            
-            for (var j = -(ctx.lineWidth / 2); j < (ctx.lineWidth / 2); j+= 4) {
-                for (var k = -(ctx.lineWidth / 2); k < (ctx.lineWidth / 2); k+= 4) {
-                    if (Math.random() > 0.5) {
-                        ctx.fillStyle = ['red', 'orange', 'yellow', 'green', 
-                                         'light-blue', 'blue', 'purple'][HelpFunction.getRandomInt(0,6)];
-                        ctx.fillRect(clickX[i]+j, clickY[i]+k, 4, 4);
-                    }
-                }
-            }
+            ctx.strokeStyle = "white";
+            drawingFunctions[0].function(ctx, clickX, clickY, clickDrag, i);
         };
     }
    	

@@ -137,13 +137,8 @@ function Drawing(_optionsPara) {
 
                 case "setClicksDone":
                     e.detail.message = JSON.parse(e.detail.message);
-                    console.log(e.detail); 
-                    console.log("setClicksDone");
-                    console.log(e.detail);
                     if(e.detail.message.to == userNumber)
                     {
-                        console.log("setClicksDone drinne");
-                        console.log("setClicksDone drinne");
                         console.log("setClicksDone drinne");
                         canvasManager.addClickPen(e.detail.message.x, e.detail.message.y, e.detail.message.drag, e.detail.message.strokeStyle, e.detail.message.lineJoin, e.detail.message.lineWidth, e.detail.message.drawingI);
                     }
@@ -152,6 +147,12 @@ function Drawing(_optionsPara) {
                 case "setUserNumber":
                     userNumber = e.detail.number;
                     console.log(userNumber);
+                    break;
+
+                case "revertStep":
+                    if(e.detail.group == options.groupName)
+                        canvasManager.revert();
+
                     break;
 
             }
@@ -181,6 +182,7 @@ function Drawing(_optionsPara) {
             var fields = Interaction.readForm.apply(formCreateCanvas);
             options = HelpFunction.merge(options, fields);
 
+            leaveGroup();
             HelpFunction.closeLightbox();
 
             if(fields.backgroundImage != null && fields.backgroundImage != "")
@@ -216,10 +218,11 @@ function Drawing(_optionsPara) {
 
             communication.sendMessage("setGroup", options.groupName, "");
             addGroup(options.groupName, true);
-
             HelpFunction.closeLightbox();
 
             formCreateGroup.reset();
+
+            setUserToHear = null;
         }]);
 
 
@@ -229,7 +232,7 @@ function Drawing(_optionsPara) {
         var groupSelection = document.getElementById("groupSelection");
         Interaction.addOnChangeListener.apply(groupSelection, [function (e) {
             if(groupSelection.value == "Keine") {
-                options.groupName = null;
+                leaveGroup();
             }
             else {
                 setUserToHear = null;
@@ -257,6 +260,8 @@ function Drawing(_optionsPara) {
         var revertLink = document.getElementById(options.revertLink);
         Interaction.addClickListener.apply(revertLink, [function (e) {
             canvasManager.revert();
+            if(options.groupName != null)
+                communication.sendMessage("revertStep", "", options.groupName);
         }]);
 
 
@@ -333,6 +338,8 @@ function Drawing(_optionsPara) {
         }]);
     }
 
+
+
     this.rebuild = function(options) {
         options = HelpFunction.merge(options, _optionsPara);
         canvasManager.rebuild(options);
@@ -362,6 +369,14 @@ function Drawing(_optionsPara) {
         else {
             console.log("already exists");
         }
+    }
+
+    function leaveGroup() {
+        if(options.groupName != null) {
+            notifier.setContent("Gruppe verlassen");
+        }
+        options.groupName = null;
+        setUserToHear = null;
     }
 
 	return this.init();
