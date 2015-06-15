@@ -52,11 +52,12 @@ a.iconLine, a.iconLine:visited {
 }
 .mainOptionsWrapper {
 	position: fixed;
-	top:5px;
-	left: 15px;
+	top:0px;
+	left: 0px;
 }
 .mainOptionsWrapper a {
-	margin-right: 10px;
+	margin-left: 10px;
+	margin-top: 10px;
 }
 
 .mainOptionsWrapper.visible .mainOptionsMenu {
