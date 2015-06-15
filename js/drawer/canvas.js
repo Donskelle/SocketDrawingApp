@@ -41,8 +41,7 @@ function Canvas(options) {
             return;
 
         var options = penManager.getPen(penNumber);
-        console.log("options");
-        console.log(options);
+
         arrayCanvas[canvasId].ctx.strokeStyle = options.strokeStyle;
         arrayCanvas[canvasId].ctx.lineJoin = options.lineJoin;
         arrayCanvas[canvasId].ctx.lineWidth =  options.lineWidth;

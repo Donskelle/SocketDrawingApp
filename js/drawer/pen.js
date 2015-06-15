@@ -87,11 +87,28 @@ function Pen() {
 
 
         drawingFunctions[2] = {};
-        drawingFunctions[2].name = "Radierer";
+        drawingFunctions[2].name = "Spray";
         drawingFunctions[2].function = function(ctx, clickX, clickY, clickDrag, i) {
+            /**
+             * Malt 50 zufällige Punkte
+             */
+            for (var j = 50; j--; ) {
+                var radius = ctx.lineWidth/2;
+                var offsetX = HelpFunction.getRandomInt(-radius, radius);
+                var offsetY = HelpFunction.getRandomInt(-radius, radius);
+                ctx.fillStyle = ctx.strokeStyle;
+                ctx.fillRect(clickX[i] + offsetX, clickY[i] + offsetY, 1, 1);
+            }
+        };
+
+        drawingFunctions[3] = {};
+        drawingFunctions[3].name = "Radierer";
+        drawingFunctions[3].function = function(ctx, clickX, clickY, clickDrag, i) {
             ctx.strokeStyle = "white";
             drawingFunctions[0].function(ctx, clickX, clickY, clickDrag, i);
         };
+
+
     }
    	
     function setColor (paraColor) {
@@ -141,8 +158,6 @@ function Pen() {
 
 
     this.getPen = function(i) {
-        console.log(pens);
-        console.log(i);
         return pens[i];
     };
 
@@ -161,8 +176,7 @@ function Pen() {
 
     this.addPen = function(_strokeStyle, _lineJoin, _lineWidth, _drawingFunctions) {
         currentPen = pens.length;
-
-        console.log(_strokeStyle + " " + _lineJoin + " " + _lineWidth + " " + _drawingFunctions)
+        
         pens[currentPen] = {
             strokeStyle : _strokeStyle,
             lineJoin : _lineJoin,
@@ -170,8 +184,7 @@ function Pen() {
             drawingFunction : drawingFunctions[_drawingFunctions].function,
             drawingFunctionsI : _drawingFunctions
         };
-        console.log("new pen");
-        console.log(pens[currentPen]);
+
         return currentPen;
     }
 

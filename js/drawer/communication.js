@@ -20,7 +20,6 @@ function Communicator() {
                 that.sendMessage("getGroups", "", "");
             };
             ws.onmessage = function(e) {
-                console.log(e.data);
                 readData(e.data);
             };
             ws.onclose = function() {
@@ -28,7 +27,7 @@ function Communicator() {
             };
         } 
         catch(e) {
-            console.log(e.message);
+            //console.log(e.message);
         }
 	};
 

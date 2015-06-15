@@ -54,7 +54,7 @@ function Drawing(_optionsPara) {
          */
         Interaction.addMessageListener.apply(notifier, [function(e) {
             var operation = e.detail.operation;
-            console.log(e.detail);
+            
             switch(operation) {
                 // Anfrage nach verfügbaren Gruppen
                 case "getGroups":
@@ -69,7 +69,6 @@ function Drawing(_optionsPara) {
                 case "addClick":
                     if(e.detail.group == options.groupName){
                         e.detail.message = JSON.parse(e.detail.message);
-                        console.log(e.detail);
                         canvasManager.addClickPen(e.detail.message.x, e.detail.message.y, e.detail.message.drag, e.detail.message.strokeStyle, e.detail.message.lineJoin, e.detail.message.lineWidth, e.detail.message.drawingI);
                     }
                     break; 
@@ -93,8 +92,7 @@ function Drawing(_optionsPara) {
                     notifier.setContent(e.detail.group + " beigetreten");
 
                     e.detail.message = JSON.parse(e.detail.message);
-                    console.log("setGroupOption");
-                    console.log(e.detail);
+
                     if(e.detail.message.to == userNumber && options.groupName == e.detail.group)
                     {
                         if(setUserToHear == null)
@@ -118,7 +116,6 @@ function Drawing(_optionsPara) {
                     e.detail.message = JSON.parse(e.detail.message);
                     if(e.detail.message.to == userNumber)
                     {
-                        console.log("drinne")
                         var sendOptions = {
                             to: e.detail.from
                         };
@@ -127,10 +124,8 @@ function Drawing(_optionsPara) {
                         for (var i = 0; i < clicksCount; i++) {
                             var clickPen = canvasManager.getClickPen(i);
                             clickPen.to = e.detail.from;
-                            console.log("clickPen");
-                            console.log(clickPen);
+    
                             communication.sendMessage("setClicksDone", JSON.stringify(clickPen));
-                            console.log("send");
                         };
                     }
                     break;
@@ -139,14 +134,12 @@ function Drawing(_optionsPara) {
                     e.detail.message = JSON.parse(e.detail.message);
                     if(e.detail.message.to == userNumber)
                     {
-                        console.log("setClicksDone drinne");
                         canvasManager.addClickPen(e.detail.message.x, e.detail.message.y, e.detail.message.drag, e.detail.message.strokeStyle, e.detail.message.lineJoin, e.detail.message.lineWidth, e.detail.message.drawingI);
                     }
                     break;
 
                 case "setUserNumber":
                     userNumber = e.detail.number;
-                    console.log(userNumber);
                     break;
 
                 case "revertStep":
@@ -309,7 +302,7 @@ function Drawing(_optionsPara) {
                     e.x = e.targetTouches[e.targetTouches.length - 1].pageX;
                     e.y = e.targetTouches[e.targetTouches.length - 1].pageY;
                 }
-                
+
                 canvasManager.addClick(e.x - offset.X, e.y - offset.Y, true);
 
                 if(options.groupName != null)
@@ -325,8 +318,6 @@ function Drawing(_optionsPara) {
                         lineWidth : pen.lineWidth,
                         drawingI : pen.drawingFunctionsI
                     });
-                    console.log(message);
-
 
                     communication.sendMessage(
                         "addClick", 
@@ -375,7 +366,7 @@ function Drawing(_optionsPara) {
             document.querySelector("#groupSelection").appendChild(option);
         }
         else {
-            console.log("already exists");
+            //console.log("already exists");
         }
     }
 
