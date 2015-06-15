@@ -271,7 +271,10 @@ function Drawing(_optionsPara) {
         var canvasWrapper = document.getElementById(options.canvasWrapper);
 
         Interaction.addMouseDownListener.apply(canvasWrapper, [function (e) {
-
+            if(typeof e.targetTouches != 'undefined') {
+                e.x = e.targetTouches[e.targetTouches.length - 1].pageX;
+                e.y = e.targetTouches[e.targetTouches.length - 1].pageY;
+            }
             canvasManager.addClick(e.x - offset.X , e.y - offset.Y , false);
             
             paint = true;
@@ -302,6 +305,11 @@ function Drawing(_optionsPara) {
         Interaction.addMouseMoveListener.apply(canvasWrapper, [function (e) {
             if(paint)
             {
+                if(typeof e.targetTouches != 'undefined') {
+                    e.x = e.targetTouches[e.targetTouches.length - 1].pageX;
+                    e.y = e.targetTouches[e.targetTouches.length - 1].pageY;
+                }
+                
                 canvasManager.addClick(e.x - offset.X, e.y - offset.Y, true);
 
                 if(options.groupName != null)

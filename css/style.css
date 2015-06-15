@@ -64,6 +64,8 @@ a.iconLine, a.iconLine:visited {
 }
 .mainOptionsWrapper .mainOptionsMenu {
 	display: none;
+	background-color: white;
+	padding: 15px;
 }
 	
 
@@ -74,8 +76,8 @@ a.iconLine, a.iconLine:visited {
 .drawOperations {
 	position: fixed;
 	right: 0;
-	top:10px;
-	width: 300px;
+	top:0px;
+	width: 280px;
 	margin-right: -250px;
 }
 .drawOperations.visible {
@@ -86,10 +88,13 @@ a.iconLine, a.iconLine:visited {
 }
 
 .openCloseMenu {
-	width:50px;
+	padding-top: 15px; 
+	width:30px;
 }
 .paintOptions {
-	width: 250px
+	width: 250px;
+	background-color: white;
+	padding: 15px;
 }
 .drawOperations #closeDrawOperations{
 	display: none;
