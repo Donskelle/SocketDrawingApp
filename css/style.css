@@ -6,9 +6,8 @@
 	margin: 0;
 	padding: 0;
 }
-
 /**
- * apply a natural box layout model to all elements, but allowing components to change 
+ * Elemente haben feste Breite. Ohne zusätzlich Padding oder Border
  */
 html {
   box-sizing: border-box;
@@ -17,23 +16,30 @@ html {
   box-sizing: inherit;
 }
 
+
+/**
+ * Standarts definieren
+ */
 body {
 	background: #a0a0a0;
 }
 input {
 	display: block;
 }
-
 ul > li {
 	list-style: none;
 }
 
+
+/**
+ * Farbe für Link Icons
+ */
 a.iconLine, a.iconLine:visited {
 	color: black;
 }
 
 /**
- * Options Menu
+ * Optionen Menü
  */
 .mainOptionsWrapper.visible #closeMainOptions{
 	display: block;
@@ -47,9 +53,7 @@ a.iconLine, a.iconLine:visited {
 .mainOptionsWrapper #openMainOptions{
 	display: block;
 }
-.mainOptionsWrapper.visible {
-		
-}
+
 .mainOptionsWrapper {
 	position: fixed;
 	top:0px;
@@ -68,11 +72,10 @@ a.iconLine, a.iconLine:visited {
 	background-color: white;
 	padding: 15px;
 }
-	
 
 
 /**
- * Draw Operations Menu
+ * Mal Operationen Menu
  */
 .drawOperations {
 	position: fixed;
@@ -83,11 +86,7 @@ a.iconLine, a.iconLine:visited {
 }
 .drawOperations.visible {
 	margin-right: 0;
-	-webkit-animation: margin 1;
-	-o-animation: margin 1;
-	animation: margin 1;
 }
-
 .openCloseMenu {
 	padding-top: 15px; 
 	width:30px;

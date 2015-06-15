@@ -1,3 +1,9 @@
+/**
+ * Bootrap Font zur Darstellung von Icons
+ * Bezogen von:
+ * http://getbootstrap.com/customize/
+ */
+
 @font-face {
   font-family: 'Glyphicons Halflings';
   src: url('../fonts/glyphicons-halflings-regular.eot');

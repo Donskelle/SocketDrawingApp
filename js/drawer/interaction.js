@@ -1,5 +1,8 @@
+"use strict";
 /**
- * Namesbereich für 
+ * Namesbereich für Interaktionsfunktionen
+ * Diese erstellen ein Callback, welches mit lokalen Variablen arbeiten kann.
+ * Die Function werden über call und dem Element aufgerufen.
  */
 
 function Interaction() {
@@ -48,25 +51,4 @@ function Interaction() {
     this.addOnChangeListener = function(callback) {
         Interaction.addListener.apply(this, ["change", callback]);
     } 
-
-    this.readForm = function () {
-        var inputs = this.getElementsByTagName("input");
-        var fields = {};
-        for (var i = 0; i < inputs.length; i++) {
-            fields[inputs[i].name] = inputs[i].value;
-        };
-
-        var selects = this.getElementsByTagName("select");
-        for (var i = 0; i < selects.length; i++) {
-            fields[selects[i].name] = selects[i].value;
-        };
-
-        var textareas = this.getElementsByTagName("textarea");
-        for (var i = 0; i < textareas.length; i++) {
-            fields[textareas[i].name] = textareas[i].value;
-        };
-        //this.reset();
-        return fields;
-    }
-
 }).call(Interaction);

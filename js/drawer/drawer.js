@@ -1,4 +1,8 @@
-
+"use strict";
+/**
+ * [Drawing description]
+ * @param {[type]} _optionsPara [description]
+ */
 function Drawing(_optionsPara) {
 	var options = {
 		width: 1000,
@@ -21,8 +25,7 @@ function Drawing(_optionsPara) {
     var userNumber = "";
     var setUserToHear = null;
 
-
-
+    // Wird automatisch beim Erstellen von Drawing aufgerufen und initzialisiert alle Events.
 	this.init = function() {
         var paint = false;
         var that = this;
@@ -61,10 +64,12 @@ function Drawing(_optionsPara) {
                     if(options.groupName != null)
                         communication.sendMessage("setGroup", options.groupName, "");
                     break;
+
                 // Antwort auf verfügbare Gruppen
                 case "setGroup":
                     addGroup(e.detail.message, false);
                     break;
+
                 // Einfügen von Zeichenoperation, falls in der gleichen Gruppe
                 case "addClick":
                     if(e.detail.group == options.groupName){
@@ -73,9 +78,11 @@ function Drawing(_optionsPara) {
                     }
                     break; 
 
+                // Ein User tritt der Gruppe bei.
                 case "joinGroup":
                     notifier.setContent("User " + e.detail.from + " tritt bei");
 
+                    // Wenn dies der aktuellen Gruppe entspricht, werden ihm die aktuellen Optionen übermittelt.
                     if(e.detail.group == options.groupName)
                     {
                         var sendOptions = {
@@ -84,17 +91,21 @@ function Drawing(_optionsPara) {
                             to: e.detail.from
                         };
                         communication.sendMessage("setGroupOptions", JSON.stringify(sendOptions), options.groupName);
-                    
                     }
                     break;
 
+                // Optionen werden zugesendet
                 case "setGroupOptions":
-                    notifier.setContent(e.detail.group + " beigetreten");
-
+                    // e.detail.message wird in ein Json Object gewandelt.
                     e.detail.message = JSON.parse(e.detail.message);
 
+                    // Wenn die Optionen von CLient angefragt wurden
                     if(e.detail.message.to == userNumber && options.groupName == e.detail.group)
                     {
+                        notifier.setContent(e.detail.group + " beigetreten");
+
+                        // Nutzer zur Kommunikation wird gesetzt. Dieser übermittelt alle bereits gemachten Interaktionen.
+                        // Dies wird unten angefragt.
                         if(setUserToHear == null)
                             setUserToHear = e.detail.from
 
@@ -107,20 +118,24 @@ function Drawing(_optionsPara) {
 
                         canvasManager.rebuild(options);
 
-
                         communication.sendMessage("getClicksDone", JSON.stringify(sendOptions))
                     }
                     break;
 
+                // Bereits gemachte Klicks werden angefragt
                 case "getClicksDone":
                     e.detail.message = JSON.parse(e.detail.message);
+                    
+                    // Wenn die Nachricht an diesen Nutzer gerichtet ist
                     if(e.detail.message.to == userNumber)
                     {
                         var sendOptions = {
                             to: e.detail.from
                         };
 
+                        // Anzahl Click holen
                         var clicksCount = canvasManager.getClickCount();
+                        // Für die Anzahl der Clicks eine Nachricht mit Clickposition und Stift verschicken.
                         for (var i = 0; i < clicksCount; i++) {
                             var clickPen = canvasManager.getClickPen(i);
                             clickPen.to = e.detail.from;
@@ -130,6 +145,7 @@ function Drawing(_optionsPara) {
                     }
                     break;
 
+                // Bereits gemachte Klicks erhalten
                 case "setClicksDone":
                     e.detail.message = JSON.parse(e.detail.message);
                     if(e.detail.message.to == userNumber)
@@ -138,19 +154,22 @@ function Drawing(_optionsPara) {
                     }
                     break;
 
+                // Die User Number wird vom Server erhalten
                 case "setUserNumber":
                     userNumber = e.detail.number;
                     break;
 
+                // Einen Schritt zurück gehen
                 case "revertStep":
                     if(e.detail.group == options.groupName)
                         canvasManager.revert();
-
                     break;
-
             }
         }]);
-
+        
+        /**
+         * Bild im Localstorage abrufen und fragen, ob es geladen werden soll.
+         */
         var canvasAsdataURL;
         canvasAsdataURL = localStorage.getItem("drawerImage");
         if (canvasAsdataURL != null) {
@@ -167,17 +186,44 @@ function Drawing(_optionsPara) {
             }
         }
 
+        // Menü für Mal Operationen wird erstellt. CreateMenu toggelt bei Klick eine Visible Klasse.
+        var menuDrawOperations = new HelpFunction.createMenu({
+            "openElement": "openDrawOperations",
+            "closeElement": "closeDrawOperations",
+            "visibleAttachElement": "drawOperationsMenu"
+        });
+
+        // Menü für Mal Operationen wird erstellt. CreateMenu toggelt bei Klick eine Visible Klasse.
+        var menuMainOptions = new HelpFunction.createMenu({
+            "openElement": "openMainOptions",
+            "closeElement": "closeMainOptions",
+            "visibleAttachElement": "mainOptionsWrapper"
+        });
+
         /**
-         * Neues Canvas erstellen
+         * Alle lightboxWrapper Klassen werden mit einem Click oder Touch Listener belegt,
+         * um bei offener Lightbox auch durch Berührung des dunklen Feldes die Lightbox zu schließen.
+         * Lightbox bei Canvas erstellen oder Gruppe erstellen
          */
+        var lightboxWrapper = document.querySelectorAll(".lightboxWrapper");
+        for (var i = lightboxWrapper.length - 1; i >= 0; i--) {
+            Interaction.addClickListener.apply(lightboxWrapper[i], [HelpFunction.closeLightbox]);
+        };
+
+        // Form Canvas erstellen wird submitted
         var formCreateCanvas = document.getElementById("formCreateCanvas");
         Interaction.addSubmitListener.apply(formCreateCanvas, [function (e) {
-            var fields = Interaction.readForm.apply(formCreateCanvas);
+            /**
+             * Neues Canvas erstellen
+             */
+            var fields = HelpFunction.readForm.apply(formCreateCanvas);
             options = HelpFunction.merge(options, fields);
 
             leaveGroup();
             HelpFunction.closeLightbox();
 
+
+            // Wenn ein Bild hochgeladen wurde, wird es in den Options gespeichert und als Hintergrund eingebunden.
             if(fields.backgroundImage != null && fields.backgroundImage != "")
             {
                 var that = this;
@@ -196,17 +242,13 @@ function Drawing(_optionsPara) {
             else {
                 canvasManager.rebuild(options);
             }
-
-            //formCreateCanvas.reset();
         }]);
 
 
-        /**
-         * Neue Gruppe erstellen
-         */
+        // Form Gruppe erstellen wird submitted
         var formCreateGroup = document.getElementById("formCreateGroup");
         Interaction.addSubmitListener.apply(formCreateGroup, [function (e) {
-            var fields = Interaction.readForm.apply(formCreateGroup);
+            var fields = HelpFunction.readForm.apply(formCreateGroup);
             options = HelpFunction.merge(options, fields);
 
             communication.sendMessage("setGroup", options.groupName, "");
@@ -218,10 +260,7 @@ function Drawing(_optionsPara) {
             setUserToHear = null;
         }]);
 
-
-        /**
-         * Gruppe auswählen
-         */
+        // Gruppe auswählen und beitreten
         var groupSelection = document.getElementById("groupSelection");
         Interaction.addOnChangeListener.apply(groupSelection, [function (e) {
             if(groupSelection.value == "Keine") {
@@ -235,21 +274,22 @@ function Drawing(_optionsPara) {
 
         }]);
 
-
+        // Canvas als Bild im Lokalstorage speichern
         var saveButton = document.getElementById(options.storeLink);
         saveButton.addEventListener('click', function(e) {
             localStorage.setItem("drawerImage", canvasManager.getDataUrl());
-            alert("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+            notifier.setContent("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
         }, true);
 
 
+        // Download des aktuellen Bildes
         var downloadButton = document.getElementById(options.downloadLink);
         downloadButton.attributes.download = options.name + ".png";
         downloadButton.addEventListener('click', function(e) {
             downloadButton.href = canvasManager.getDataUrl(); 
         }, true);
 
-
+        // Zurück Button anlegen. Letzte Mal Operation wird entfernt.
         var revertLink = document.getElementById(options.revertLink);
         Interaction.addClickListener.apply(revertLink, [function (e) {
             canvasManager.revert();
@@ -258,11 +298,10 @@ function Drawing(_optionsPara) {
         }]);
 
 
-        /**
-         * Canvas Touch und Mouse Events
-         */
+        //Canvas Touch und Mouse Events anlegen. Auf dem Wrappen. In diesen werden die Canvas hinzugefügt.
         var canvasWrapper = document.getElementById(options.canvasWrapper);
 
+        // Mouse oder Touch Move beginnt
         Interaction.addMouseDownListener.apply(canvasWrapper, [function (e) {
             if(typeof e.targetTouches != 'undefined') {
                 e.x = e.targetTouches[e.targetTouches.length - 1].pageX;
@@ -294,7 +333,7 @@ function Drawing(_optionsPara) {
             }
         }]);
 
-
+        // Mouse oder Touchbewegung
         Interaction.addMouseMoveListener.apply(canvasWrapper, [function (e) {
             if(paint)
             {
@@ -327,23 +366,26 @@ function Drawing(_optionsPara) {
                 }
             }
         }]);
-
+        
+        // Touch- oder Clickbewegung hört auf
         Interaction.addClickListener.apply(canvasWrapper, [function (e) {
             paint = false;
         }]);
 
+        // Mouse oder Touchbewgung verlässt das Element
         Interaction.addMouseLeaveListener.apply(canvasWrapper, [function (e) {
             paint = false;
         }]);
     }
 
 
-
-    this.rebuild = function(options) {
+    // Optionen werden zusammengeführt
+    this.rebuild = function(_optionsPara) {
         options = HelpFunction.merge(options, _optionsPara);
         canvasManager.rebuild(options);
     }
 
+    // CanvasWrapper wird horizental zentriert. Außerdem wird der Offset aktualisiert
     this.offsetWrapper = function() {
         var wrapper = document.getElementById(options.canvasWrapper);
 
@@ -353,6 +395,7 @@ function Drawing(_optionsPara) {
         offset.X = wrapper.offsetLeft;
     };
 
+    // Gruppe wird zum Select Input hinzugefügt, wenn Sie nicht bereits vorhanden ist.
     function addGroup(groupName, selected) {
         var testIfAlreadyExists = document.querySelector("#groupSelection option[value='" + groupName + "']");
         
@@ -365,11 +408,9 @@ function Drawing(_optionsPara) {
             option.appendChild(document.createTextNode(groupName));
             document.querySelector("#groupSelection").appendChild(option);
         }
-        else {
-            //console.log("already exists");
-        }
     }
 
+    // Aktuelle Gruppe wird verlassen
     function leaveGroup() {
         if(options.groupName != null) {
             notifier.setContent("Gruppe verlassen");

@@ -1,9 +1,11 @@
 "use strict";
-
-function Canvas(options) {
-	
+/**
+ * [Canvas description]
+ * In dieser Klasse werden die Canvas Dom Elemente erstellt und die eigentliche Zeichenlogik angespiegelt.
+ */
+function Canvas(options) 
+{
     var arrayCanvas = new Array();
-
     var clickX = new Array();
     var clickY = new Array();
     var clickDrag = new Array();
@@ -11,13 +13,21 @@ function Canvas(options) {
 
     var penManager = new Pen();
 
-
+    // Initialisiert das 1. Canvas Element.
     this.init = function() {
     	addCanvas();
 
         return this;
     }
     
+    /**
+     * [getClickPen description]
+     * ClickPostition und aktueller Stift werden entsprechend i zurückgegeben
+     * @param  {[int]} i [description]
+     * Position des Clicks
+     * @return {[object]}   [description]
+     * Object mit allen Werten wird zurück gegeben
+     */
     this.getClickPen = function(i) {
         var response = {};
         var pena = this.getPenToSend(i);
@@ -32,10 +42,24 @@ function Canvas(options) {
         return response;
     }
 
+    /**
+     * [getClickCount description]
+     * Anzahl der Click und Touch Operationen abfragen
+     * @return {[int]} [description]
+     * Anzahl Clicks
+     */
     this.getClickCount = function() {
         return clickX.length;
     }
 
+    /**
+     * [setPen description]
+     * Setzt Mal Art entsprechend des angegeben Stiftes auf dem angegebenen canvas
+     * @param {[int]} penNumber [description]
+     * Id des Stiften
+     * @param {[int]} canvasId  [description]
+     * Canvas, welches den Stift anwenden soll
+     */
     this.setPen = function(penNumber, canvasId) {
         if(arrayCanvas[canvasId].currentPen == penNumber)
             return;
@@ -54,7 +78,12 @@ function Canvas(options) {
             arrayCanvas[canvasId].drawFunction = penManager.getFunction(options.drawingFunctionsI);
     }
 
-
+    /**
+     * [rebuild description]
+     * Setzt das Objekt zurück und übernimmt die übergebenen Optionen
+     * @param  {[object]} _optionsPara [description]
+     * Optionen siehe Drawer
+     */
     this.rebuild = function(_optionsPara) {
         clickX.length = 0;
         clickY.length = 0;

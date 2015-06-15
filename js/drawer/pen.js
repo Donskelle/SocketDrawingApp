@@ -1,3 +1,7 @@
+"use strict";
+/**
+ * [Pen description]
+ */
 function Pen() {
     var pens = new Array();
     var color = "#000000";
@@ -8,7 +12,7 @@ function Pen() {
     var currentPen = 0;
     var drawingFunctions = new Array();
 
-
+    // Stift werden initzialisiert und zur Dom hinzugefügt
     this.init = function() {
         var colorPicker = document.getElementById("colorPicker");
         var strokePicker = document.getElementById("strokePicker");
@@ -44,14 +48,23 @@ function Pen() {
             drawingFunctionsI : currentDrawingFunction
         };
         HelpFunction.toggleClassName(document.getElementById("pen0"), true, "active");
-
     }
 
+    /**
+     * [getFunction description]
+     * Fragt die Function einer MalOperation ab
+     * @param  {[type]} i [description]
+     * Index der Maloperation
+     * @return {[function]}   [description]
+     */
     this.getFunction = function(i) {
-
         return drawingFunctions[i].function;
     }
 
+    /**
+     * [initDrawingFunctions description]
+     * Erstellt Mal Operationen 
+     */
     function initDrawingFunctions() {
 
         drawingFunctions[0] = {};
@@ -111,6 +124,11 @@ function Pen() {
 
     }
    	
+    /**
+     * [setColor description]
+     * Setzt Color des Stiftes
+     * @param {[type]} paraColor [description]
+     */
     function setColor (paraColor) {
     	// Wenn durch das Change Event ausgelöst wird, wird der Wert aus dem colorPicker genommen.
     	if(typeof paraColor === "object")
@@ -121,8 +139,13 @@ function Pen() {
         changePen = true;
     };
 
-
+    /**
+     * [setLineArt description]
+     * Setzt Linienart des Stiftes
+     * @param {[type]} paraLineArt [description]
+     */
     function setLineArt (paraLineArt) {
+        // Wenn durch das Change Event ausgelöst wird, wird der Wert aus dem colorPicker genommen.
     	if(typeof paraLineArt === "object")
     		lineArt = strokePicker.value;
     	else 
@@ -131,8 +154,13 @@ function Pen() {
         changePen = true;
     };
 
-
+    /**
+     * [setLineWidth description]
+     * Setzt Linien Breite
+     * @param {[type]} paraLineWidth [description]
+     */
     function setLineWidth (paraLineWidth) {
+        // Wenn durch das Change Event ausgelöst wird, wird der Wert aus dem colorPicker genommen.
     	if(typeof paraLineWidth === "object")
     		width = widthPicker.value;
         else
@@ -141,6 +169,11 @@ function Pen() {
         changePen = true;
     };
 
+    /**
+     * [setDrawingFunction description]
+     * Setzt eine neue Mal Operation mit der entsprechenden id
+     * @param {[int]} id [description]
+     */
     function setDrawingFunction(id) {
         var i = parseInt(id.replace("pen", ""));
         if (currentDrawingFunction != i)
@@ -156,11 +189,22 @@ function Pen() {
         }
     }
 
-
+    /**
+     * [getPen description]
+     * Gibt Stift zurück
+     * @param  {[int]} i [description]
+     * Index des Stiftes
+     * @return {[object]}   [description]
+     */
     this.getPen = function(i) {
         return pens[i];
     };
 
+    /**
+     * [rebuild description]
+     * Pen wird zurückgesetzt
+     * @return {[type]} [description]
+     */
     this.rebuild = function() {
         pens.length = 0;
         currentPen = 0;
@@ -174,6 +218,14 @@ function Pen() {
         };
     }
 
+    /**
+     * [addPen description]
+     * Stift hinzufügen
+     * @param {[string]} _strokeStyle      [description]
+     * @param {[string]} _lineJoin         [description]
+     * @param {[string]} _lineWidth        [description]
+     * @param {[string]} _drawingFunctions [description]
+     */
     this.addPen = function(_strokeStyle, _lineJoin, _lineWidth, _drawingFunctions) {
         currentPen = pens.length;
         
@@ -188,6 +240,12 @@ function Pen() {
         return currentPen;
     }
 
+    /**
+     * [getCurrentNumber description]
+     * Aktuelle Nummer des Stiftes abfragen. Dient dazu nicht jedes Mal ein neues Objekt erstellen zu müssen
+     * @return {[int]} [description]
+     * index des aktuellen Stiftes
+     */
     this.getCurrentNumber = function() {
         if (changePen === true)
         {
@@ -206,11 +264,23 @@ function Pen() {
         return currentPen;
     };
 
+    /**
+     * [setCurrentPen description]
+     * Setzt aktuellen Stift 
+     * @param {[int]} i [description]
+     * 
+     */
     this.setCurrentPen = function(i) {
         currentPen = i;
     }
 
-
+    /**
+     * [getDrawingFunction description]
+     * Drawing Funktion des angegebenen Indexes abfragen
+     * @param  {[int]} i [description]
+     * Index der Funktion
+     * @return {[function]}   [description]
+     */
     this.getDrawingFunction = function(i) {
         return drawingFunction[i].function;
     }
