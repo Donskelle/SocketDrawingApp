@@ -7,10 +7,42 @@
 	<link rel="stylesheet" href="css/font.css">
 </head>
 <body>
+	<!--
+		Hier werden Canvas Elemente eingefügt
+	-->
 	<div id="canvasWrapper">
 		
 	</div>
 
+	<!--
+		Das Menu der Applikation
+	-->
+	<div class="mainOptionsWrapper" id="mainOptionsWrapper">
+		<div class="mainOptionsMenu">
+			<a href="#newCanvas">Neu</a>
+			<a href="#" id="storeLink">Bild speichern</a>
+			<a href="#wrapperStorage" id="loadImgLink">Bild laden</a>
+			<a href="#" id="downloadLink" target="_blank">Download</a>
+			<a href="#newGroup">Gruppe erstellen</a>
+			<a href="#" id="saveSettings">Einstellungen speichern</a>
+			<a href="#wrapperStorage" id="loadSettings">Einstellungen laden</a>
+			
+			<label for="groupSelection">Gruppe auswählen</label>
+			<select id="groupSelection">
+				<option>Keine</option>
+			</select>
+		</div>
+
+		<div class="openMainOptions">
+			<a href="#" class="iconLine" id="openMainOptions"><span class="glyphicon glyphicon-arrow-down"></span></a>
+			<a href="#" class="iconLine" id="closeMainOptions"><span class="glyphicon glyphicon-arrow-up"></span></a>
+		</div>
+	</div>
+	
+
+	<!--
+		Das Menu der Applikation
+	-->
 	<div class="drawOperations" id="drawOperationsMenu">
 		<div class="floating openCloseMenu" id="#">
 			<a href="#" class="iconLine" id="openDrawOperations"><span class="glyphicon glyphicon-arrow-left"></span></a>
@@ -46,23 +78,9 @@
 		</div>
 	</div>
 
-	<div class="mainOptionsWrapper" id="mainOptionsWrapper">
-		<div class="mainOptionsMenu">
-			<a href="#newCanvas">Neu</a>
-			<a href="#" id="storeLink">Speichern</a>
-			<a href="#" id="downloadLink" target="_blank">Download</a>
-			<a href="#newGroup">Gruppe erstellen</a>
-
+	<div id="wrapperStorage" class="lightboxWrapper">
+		<div class="lightboxContent" id="wrapperStorageContent">
 			
-			<label for="groupSelection">Gruppe auswählen</label>
-			<select id="groupSelection">
-				<option>Keine</option>
-			</select>
-		</div>
-
-		<div class="openMainOptions">
-			<a href="#" class="iconLine" id="openMainOptions"><span class="glyphicon glyphicon-arrow-down"></span></a>
-			<a href="#" class="iconLine" id="closeMainOptions"><span class="glyphicon glyphicon-arrow-up"></span></a>
 		</div>
 	</div>
 	
@@ -103,6 +121,7 @@
 	<script src="js/drawer/CustomNotifierElement.js"></script>
 	<script src="js/drawer/HelpFunctions.js"></script>
 	<script src="js/drawer/Communication.js"></script>
+	<script src="js/drawer/Storage.js"></script>
 	
 	<script src="js/drawer/Interaction.js"></script>
 	<script src="js/drawer/Pen.js"></script>

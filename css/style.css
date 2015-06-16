@@ -176,7 +176,9 @@ a:hover {
 #newCanvas:target {
 	display:block;
 }
-
+#wrapperStorage:target {
+	display:block;
+}
 
 /**
  * Lightbox Klassen

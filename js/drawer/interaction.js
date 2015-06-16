@@ -4,7 +4,6 @@
  * Diese erstellen ein Callback, welches mit lokalen Variablen arbeiten kann.
  * Die Function werden über call und dem Element aufgerufen.
  */
-
 function Interaction() {
 
 }

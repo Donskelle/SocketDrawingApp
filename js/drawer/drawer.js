@@ -21,6 +21,7 @@ function Drawing(_optionsPara) {
 
     var canvasManager = new Canvas(options);
     var communication = new Communicator();
+    var storageManager = new Storage();
     var notifier = document.getElementsByTagName("x-notifier")[0];
     var userNumber = "";
     var setUserToHear = null;
@@ -167,25 +168,6 @@ function Drawing(_optionsPara) {
             }
         }]);
         
-        /**
-         * Bild im Localstorage abrufen und fragen, ob es geladen werden soll.
-         */
-        var canvasAsdataURL;
-        canvasAsdataURL = localStorage.getItem("drawerImage");
-        if (canvasAsdataURL != null) {
-            var response = confirm("Bild gefunden. Möchten Sie es Laden?");
-            if(response == true)
-            {
-                options.backgroundImage = new Image();
-                options.backgroundImage.src = canvasAsdataURL;
-
-                options.width = options.backgroundImage.width;
-                options.height = options.backgroundImage.height;
-
-                canvasManager.rebuild(options);
-            }
-        }
-
         // Menü für Mal Operationen wird erstellt. CreateMenu toggelt bei Klick eine Visible Klasse.
         var menuDrawOperations = new HelpFunction.createMenu({
             "openElement": "openDrawOperations",
@@ -209,6 +191,61 @@ function Drawing(_optionsPara) {
         for (var i = lightboxWrapper.length - 1; i >= 0; i--) {
             Interaction.addClickListener.apply(lightboxWrapper[i], [HelpFunction.closeLightbox]);
         };
+
+
+        var storageWrapper = document.getElementById("wrapperStorageContent");
+        /**
+         * Bei Klick auf loadSettings wird der StorageWrapper mit SettingsDaten befüllt und dargestellt.
+         */
+        var loadSettingsLink = document.getElementById("loadSettings");
+        Interaction.addClickListener.apply(loadSettingsLink, [function(e) {
+            storageWrapper.innerHTML = "<h2>Gespeicherte Einstellungen</h2>";
+            var settings = storageManager.getAllSettingsKeys();
+
+            for (var i = 0; i < settings.length; i++) {
+                var link = document.createElement("a");
+                var text = document.createTextNode(settings[i]);
+                link.appendChild(text);
+                storageWrapper.appendChild(link);
+
+                link.addEventListener("click", function(e) {
+                    var jsonString = storageManager.loadSettings( e.target.text )
+                    var jsonObj = JSON.parse(jsonString);
+                    options.width = jsonObj.width;
+                    options.height = jsonObj.height;
+
+                    canvasManager.rebuild(options);
+                    HelpFunction.closeLightbox();
+                })      
+            };
+            // Eigentliches Klick Event wird ausgeführt und so die Lightbox dargestellt
+            return true;
+        }]);
+
+
+        /**
+         * Bei Klick auf loadImages wird der StorageWrapper mit Localstorage Bilder befüllt und dargestellt.
+         */
+        var loadImageLink = document.getElementById("loadImgLink");
+        Interaction.addClickListener.apply(loadImageLink, [function(e) {
+            var images = storageManager.getAllImageKeys();
+            storageWrapper.innerHTML = "<h2>Gespeicherte Bilder</h2>";
+            for (var i = 0; i < images.length; i++) {
+                var link = document.createElement("a");
+                var text = document.createTextNode(images[i]);
+                link.appendChild(text);
+                storageWrapper.appendChild(link);
+
+                link.addEventListener("click", function(e) {
+                    that.rebuildWithBackground(storageManager.loadImage( e.target.text ));
+                    HelpFunction.closeLightbox();
+                });
+            };
+            // Eigentliches Klick Event wird ausgeführt und so die Lightbox dargestellt
+            return true;
+        }]);
+
+
 
         // Form Canvas erstellen wird submitted
         var formCreateCanvas = document.getElementById("formCreateCanvas");
@@ -277,8 +314,37 @@ function Drawing(_optionsPara) {
         // Canvas als Bild im Lokalstorage speichern
         var saveButton = document.getElementById(options.storeLink);
         saveButton.addEventListener('click', function(e) {
-            localStorage.setItem("drawerImage", canvasManager.getDataUrl());
-            notifier.setContent("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+            var imgName = prompt("Bitte einen Namen zum Speichern eingeben");
+            if (imgName != null) {
+                if(imgName != "")
+                {
+                    storageManager.saveImage(imgName, canvasManager.getDataUrl());
+                    notifier.setContent("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+                }
+                else { 
+                    notifier.setContent("Eingabe leer");
+                }
+            }
+        }, true);
+
+        // Einstellungen als JSON String in Lokalstorage speichern
+        var saveSettingsButton = document.getElementById("saveSettings");
+        saveSettingsButton.addEventListener('click', function(e) {
+            var settingsName = prompt("Bitte einen Namen zum Speichern eingeben");
+            if (settingsName != null) {
+                if(settingsName != "")
+                {   
+                    var settings = {
+                        width: options.width,
+                        height: options.height
+                    };
+                    storageManager.saveSettings(settingsName, JSON.stringify(settings));
+                    notifier.setContent("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+                }
+                else { 
+                    notifier.setContent("Eingabe leer");
+                }
+            }
         }, true);
 
 
@@ -288,6 +354,7 @@ function Drawing(_optionsPara) {
         downloadButton.addEventListener('click', function(e) {
             downloadButton.href = canvasManager.getDataUrl(); 
         }, true);
+
 
         // Zurück Button anlegen. Letzte Mal Operation wird entfernt.
         var revertLink = document.getElementById(options.revertLink);
@@ -378,6 +445,16 @@ function Drawing(_optionsPara) {
         }]);
     }
 
+
+    this.rebuildWithBackground = function (imgAsDataURL) {
+        options.backgroundImage = new Image();
+        options.backgroundImage.src = imgAsDataURL;
+
+        options.width = options.backgroundImage.width;
+        options.height = options.backgroundImage.height;
+
+        canvasManager.rebuild(options);
+    }
 
     // Optionen werden zusammengeführt
     this.rebuild = function(_optionsPara) {
