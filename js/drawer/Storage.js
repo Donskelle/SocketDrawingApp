@@ -1,6 +1,6 @@
 /**
  * [Storage description]
- * Speichert Einstellungen und Bilder ab
+ * Speichert und liest Einstellungen und Bilder aus dem LocalStorage
  */
 function Storage() {
 	var imagePrefix = "_image";
@@ -11,7 +11,7 @@ function Storage() {
      * Lädt ein gespeichertes Bild.
      * @param sName.
      */
-    this.loadImage = function(imgName){
+    this.loadImage = function(imgName) {
         return localStorage.getItem(imgName + imagePrefix);
     };
 

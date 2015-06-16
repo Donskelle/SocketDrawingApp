@@ -1,6 +1,8 @@
 "use strict";
 /**
  * [Pen description]
+ * Erstellt Dom Elemente für Stifte und legt Klickfunktionen für diese ab.
+ * Außerdem speichert es Stifte ab, um später darauf zugreifen zu können.
  */
 function Pen() {
     var pens = new Array();

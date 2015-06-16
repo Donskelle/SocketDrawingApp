@@ -1,7 +1,7 @@
 "use strict";
 /**
  * [Drawing description]
- * @param {[type]} _optionsPara [description]
+ * Inzialisiert alle Objekte und erstellt Events
  */
 function Drawing(_optionsPara) {
 	var options = {

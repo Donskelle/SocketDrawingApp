@@ -81,7 +81,7 @@ a.iconLine, a.iconLine:visited {
 	position: fixed;
 	right: 0;
 	top:0px;
-	width: 280px;
+	width: 290px;
 	margin-right: -250px;
 }
 .drawOperations.visible {
@@ -89,7 +89,7 @@ a.iconLine, a.iconLine:visited {
 }
 .openCloseMenu {
 	padding-top: 15px; 
-	width:30px;
+	width:40px;
 }
 .paintOptions {
 	width: 250px;
