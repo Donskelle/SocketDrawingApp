@@ -1,4 +1,3 @@
-"use strict";
 function init() {
 	var drawing = new Drawing({});
 }

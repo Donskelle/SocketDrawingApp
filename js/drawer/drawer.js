@@ -117,6 +117,7 @@ function Drawing(_optionsPara) {
                         options.height = e.detail.message.height;
                         options.backgroundImage = null;
 
+                        askSave();
                         canvasManager.rebuild(options);
 
                         communication.sendMessage("getClicksDone", JSON.stringify(sendOptions))
@@ -214,6 +215,7 @@ function Drawing(_optionsPara) {
                     options.width = jsonObj.width;
                     options.height = jsonObj.height;
 
+                    askSave();
                     canvasManager.rebuild(options);
                     HelpFunction.closeLightbox();
                 })      
@@ -259,7 +261,7 @@ function Drawing(_optionsPara) {
             leaveGroup();
             HelpFunction.closeLightbox();
 
-
+            askSave();
             // Wenn ein Bild hochgeladen wurde, wird es in den Options gespeichert und als Hintergrund eingebunden.
             if(fields.backgroundImage != null && fields.backgroundImage != "")
             {
@@ -452,12 +454,14 @@ function Drawing(_optionsPara) {
 
         options.width = options.backgroundImage.width;
         options.height = options.backgroundImage.height;
-
+        askSave();
         canvasManager.rebuild(options);
     }
 
     // Optionen werden zusammengeführt
     this.rebuild = function(_optionsPara) {
+        console.log("drin");
+        askSave();
         options = HelpFunction.merge(options, _optionsPara);
         canvasManager.rebuild(options);
     }
@@ -494,6 +498,25 @@ function Drawing(_optionsPara) {
         }
         options.groupName = null;
         setUserToHear = null;
+    }
+
+    // Fragt ob aktuelle Maloperation gespeichert werden soll
+    function askSave () {
+        var clicksCount = canvasManager.getClickCount();
+        if(clicksCount>0) {
+            var r = confirm("Möchten Sie Speichern?");
+            if (r == true) {
+                var imgName = prompt("Bitte einen Namen zum Speichern eingeben");
+                if (imgName != null) {
+                    if(imgName != "")
+                    {
+                        storageManager.saveImage(imgName, canvasManager.getDataUrl());
+                        notifier.setContent("Erfolgreich ! Kann nun beim nächsten Aufruf geladen werden.");
+                    }
+                }
+            }
+        }
+        return;
     }
 
 	return this.init();

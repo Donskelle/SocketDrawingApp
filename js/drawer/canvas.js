@@ -101,6 +101,11 @@ function Canvas(options)
         addCanvas(); 
     }
 
+
+    /**
+     * [revert description]
+     * Letzte Bewegung wird entfernt
+     */
     this.revert = function() {
         if(clickDrag[clickDrag.length - 1 ] == true)
         {
@@ -131,9 +136,13 @@ function Canvas(options)
         this.drawAll();
     }
 
+    /**
+     * [addClick description]
+     * Letzte Bewegung wird hinzugefügt
+     */
     this.addClick = function(x, y, dragging) {
-        setX( x );
-        setY( y );
+        clickX.push(x);
+        clickY.push(y);
         clickDrag.push(dragging);
 
         pens.push(penManager.getCurrentNumber());
@@ -146,6 +155,10 @@ function Canvas(options)
         this.drawLast();
     }
 
+    /**
+     * [getPenToSend description]
+     * Pen ohne Funktion holen
+     */
     this.getPenToSend = function(index) {
         var pena
         if(typeof index == "undefined")
@@ -157,10 +170,13 @@ function Canvas(options)
         return pena;
     }
 
-
+    /**
+     * [addClickPen description]
+     * Bewegung inklusive Stift hinzufügen
+     */
     this.addClickPen = function(x, y, dragging, strokeStyle, lineJoin, lineWidth, drawingFunctionsI) {
-        setX( x );
-        setY( y );
+        clickX.push(x);
+        clickY.push(y);
         clickDrag.push(dragging);
 
         var oldNumber = penManager.getCurrentNumber();
@@ -178,6 +194,11 @@ function Canvas(options)
         penManager.setCurrentPen(oldNumber);
     }
 
+
+     /**
+     * [drawAll description]
+     * Alle Operationen des aktuellen Canvas Elements werden wiederholt
+     */
     this.drawAll = function() {
         var canvasToDraw = Math.floor(clickX.length/500);
 
@@ -190,6 +211,10 @@ function Canvas(options)
         };
     }
 
+    /**
+     * [drawLast description]
+     * Zuletzt hinzugefügte Bewegung wird gezeichnet
+     */
     this.drawLast = function() {
         var canvasToDraw = Math.floor(clickX.length/500);
         var i = clickX.length - 1;
@@ -198,6 +223,11 @@ function Canvas(options)
         arrayCanvas[canvasToDraw].drawFunction(arrayCanvas[canvasToDraw].ctx, clickX, clickY, clickDrag, i);
     }
 
+    /**
+     * [getDataUrl description]
+     * Holt die dataUrl von allen Canvas und malt sie auf einen neuen Canvas Layer. 
+     * Welches dann ebenfalls über die Methode toDataUrl geholt wird und zurück gegeben wird.
+     */
     this.getDataUrl = function() {
         var images = [];
 
@@ -220,6 +250,13 @@ function Canvas(options)
         return downloadImage;
     }
 
+    /**
+     * [drawDefaults description]
+     * Malt ein BackgroundImage falls gesetzt
+     * @param  {[int]} i [description]
+     * Indes des Canvas Elements
+
+     */
     var drawDefaults = function(i) {
     	arrayCanvas[i].ctx.clearRect(0, 0, options.width, options.height);
 
@@ -229,20 +266,10 @@ function Canvas(options)
         }
     };
 
-
- 
-
-
-    var setX = function (x) {
-        clickX.push(x);
-    };
-
-
-    var setY = function(y) {
-        clickY.push(y);
-    };
-
-
+    /**
+     * [addCanvas description]
+     * Canvas Layer wird hinzugefügt
+     */
     var addCanvas = function() {
         var i = arrayCanvas.length;
         var canv = document.createElement('canvas');
@@ -264,6 +291,10 @@ function Canvas(options)
         drawDefaults(i);
     };
 
+    /**
+     * [deleteCanvas description]
+     * Canvas Layer wird entfernt
+     */
     var deleteCanvas = function() {
         var i = arrayCanvas.length - 1;
         var canvas = arrayCanvas[i].canvas;

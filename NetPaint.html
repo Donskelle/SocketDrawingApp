@@ -45,7 +45,7 @@
 	
 
 	<!--
-		Das Menu der Applikation
+		Das Menu der Stifte
 	-->
 	<div class="drawOperations" id="drawOperationsMenu">
 		<div class="floating openCloseMenu" id="#">
@@ -78,21 +78,27 @@
 			</select>
 
 			<label for="colorPicker">Farben wählen:</label>
-			<input type="color" name="color" id="colorPicker"/>
+			<input type="color" name="color" id="colorPicker">
 		</div>
 	</div>
-
+	
+	<!--
+		Hier wird dynamisch aus dem Localstorage inhalt rein geladen
+	-->
 	<div id="wrapperStorage" class="lightboxWrapper">
 		<div class="lightboxContent" id="wrapperStorageContent">
 			
 		</div>
 	</div>
 	
+	<!--
+		Neues Canvas erstellen
+	-->
 	<div id="newCanvas" class="lightboxWrapper">
 		<div class="lightboxContent">
 			<h1>Neue Zeichnung</h1>
 			<form id="formCreateCanvas">
-				<label for="canvasName" maxlength="10">Name</label>
+				<label for="canvasName">Name</label>
 				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name"/>
 				<label for="canvasHeight">Breite Canvas</label>
 				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width"/>
@@ -105,12 +111,16 @@
 			</form>
 		</div>
 	</div>
+	
 
+	<!--
+		Neues Canvas erstellen
+	-->
 	<div id="newGroup" class="lightboxWrapper">
 		<div class="lightboxContent">
 			<h1>Neue Gruppe</h1>
 			<form id="formCreateGroup">
-				<input type="text" placeholder="Gruppen Name"name="groupName" maxlength="6" required>
+				<input type="text" placeholder="Gruppen Name" name="groupName" maxlength="6" required>
 				<div class="row">
 					<button>Erstellen</button>
 				</div>
@@ -121,7 +131,11 @@
 		</div>
 	</div>
 	<a id="closeLightbox" href="#closeLightbox"></a>
+	
 
+	<!--
+		Drawer Files
+	-->
 	<script src="js/drawer/CustomNotifierElement.js"></script>
 	<script src="js/drawer/HelpFunctions.js"></script>
 	<script src="js/drawer/Communication.js"></script>
@@ -132,6 +146,10 @@
 	<script src="js/drawer/Canvas.js"></script>
 	<script src="js/drawer/Drawer.js"></script>
 	
+
+	<!--
+		INIT Drawer
+	-->
 	<script src="js/init.js"></script>
 </body>
 </html>
