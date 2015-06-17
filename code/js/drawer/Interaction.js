@@ -8,10 +8,11 @@ function Interaction() {
 
 }
 (function(){
-    this.makeCallback = function(callback) {
+    this.makeCallback = function(callback, prevent) {
         return function(e) {
             callback(e);
-            e.preventDefault();
+            if(typeof prevent == "undefined")
+                e.preventDefault();
         };
     }
 
@@ -19,9 +20,13 @@ function Interaction() {
         this.addEventListener(listener, Interaction.makeCallback(callback));
     }
 
+    this.addListenerWithOutPrevent = function (listener, callback) {
+        this.addEventListener(listener, Interaction.makeCallback(callback, false));
+    }
+
     this.addClickListener = function(callback) {
-        Interaction.addListener.apply(this, ["mouseup", callback]);
-        Interaction.addListener.apply(this, ["touchend", callback]);
+        Interaction.addListenerWithOutPrevent.apply(this, ["mouseup", callback]);
+        Interaction.addListenerWithOutPrevent.apply(this, ["touchend", callback]);
     }
 
     this.addMouseDownListener = function(callback) {

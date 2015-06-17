@@ -22,6 +22,7 @@ function HelpFunction() {
 		else if(e.target.className == "lightboxWrapper") {
 			document.getElementById("closeLightbox").click();
 		}
+		return true;
 	}
 
 

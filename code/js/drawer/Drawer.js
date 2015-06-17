@@ -216,6 +216,7 @@ function Drawing(_optionsPara) {
                     options.height = jsonObj.height;
 
                     askSave();
+                    leaveGroup();
                     canvasManager.rebuild(options);
                     HelpFunction.closeLightbox();
                 })      
@@ -240,6 +241,7 @@ function Drawing(_optionsPara) {
 
                 link.addEventListener("click", function(e) {
                     that.rebuildWithBackground(storageManager.loadImage( e.target.text ));
+                    leaveGroup();
                     HelpFunction.closeLightbox();
                 });
             };
@@ -249,12 +251,10 @@ function Drawing(_optionsPara) {
 
 
 
-        // Form Canvas erstellen wird submitted
+        // Form für Canvas erstellen wird submitted
         var formCreateCanvas = document.getElementById("formCreateCanvas");
         Interaction.addSubmitListener.apply(formCreateCanvas, [function (e) {
-            /**
-             * Neues Canvas erstellen
-             */
+
             var fields = HelpFunction.readForm.apply(formCreateCanvas);
             options = HelpFunction.merge(options, fields);
 
@@ -262,6 +262,7 @@ function Drawing(_optionsPara) {
             HelpFunction.closeLightbox();
 
             askSave();
+            leaveGroup();
             // Wenn ein Bild hochgeladen wurde, wird es in den Options gespeichert und als Hintergrund eingebunden.
             if(fields.backgroundImage != null && fields.backgroundImage != "")
             {
@@ -460,7 +461,6 @@ function Drawing(_optionsPara) {
 
     // Optionen werden zusammengeführt
     this.rebuild = function(_optionsPara) {
-        console.log("drin");
         askSave();
         options = HelpFunction.merge(options, _optionsPara);
         canvasManager.rebuild(options);
@@ -495,8 +495,10 @@ function Drawing(_optionsPara) {
     function leaveGroup() {
         if(options.groupName != null) {
             notifier.setContent("Gruppe verlassen");
+            document.getElementById("groupSelection").selectedIndex = 0;
+            options.groupName = null;
         }
-        options.groupName = null;
+        
         setUserToHear = null;
     }
 

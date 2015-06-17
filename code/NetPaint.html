@@ -38,8 +38,8 @@
 		</div>
 
 		<div class="openMainOptions">
-			<a href="#" class="iconLine" id="openMainOptions"><span class="glyphicon glyphicon-arrow-down"> Einstellungen</span> </a>
-			<a href="#" class="iconLine" id="closeMainOptions"><span class="glyphicon glyphicon-arrow-up"> Einstellungen</span> </a>
+			<a href="#" class="iconLine" id="openMainOptions"><span class="glyphicon glyphicon-arrow-down"> Einstellungen</span></a>
+			<a href="#" class="iconLine" id="closeMainOptions"><span class="glyphicon glyphicon-arrow-up"> Einstellungen</span></a>
 		</div>
 	</div>
 	
@@ -49,8 +49,8 @@
 	-->
 	<div class="drawOperations" id="drawOperationsMenu">
 		<div class="floating openCloseMenu" id="#">
-			<a href="#" class="iconLine" id="openDrawOperations"><span class="glyphicon glyphicon-arrow-left"> Stifte</span> </a>
-			<a href="#" class="iconLine" id="closeDrawOperations"><span class="glyphicon glyphicon-arrow-right"> Stifte</span> </a>
+			<a href="#" class="iconLine" id="openDrawOperations"><span class="glyphicon glyphicon-arrow-left"> Stifte</span></a>
+			<a href="#" class="iconLine" id="closeDrawOperations"><span class="glyphicon glyphicon-arrow-right"> Stifte</span></a>
 		</div>
 		<div class="floating paintOptions">
 			<h2>Stifte</h2>
@@ -101,9 +101,9 @@
 				<label for="canvasName">Name</label>
 				<input type="text" value="New Canvas" required placeholder="Name" id="canvasName" name="name"/>
 				<label for="canvasHeight">Breite Canvas</label>
-				<input type="text" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width"/>
+				<input type="number" value="" required placeholder="Breite in Pixel (Max 1200)" id="canvasWidth" name="width" max="9999"/>
 				<label for="canvasHeight">Höhe Canvas</label>
-				<input type="text" value="" required placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height"/>
+				<input type="number" value="" required placeholder="Höhe  in Pixel (Max 1200)" id="canvasHeight" name="height" max="9999"/>
 				<label for="fileUpload">Bild hochladen</label>
 				<input type="file" id="fileUpload" name="backgroundImage"/>
 				<button id="buttonCreate">Erstellen</button>

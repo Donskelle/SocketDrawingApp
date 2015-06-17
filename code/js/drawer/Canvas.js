@@ -247,6 +247,7 @@ function Canvas(options)
 
 
         var downloadImage = canvas.canvas.toDataURL('image/png');
+        deleteCanvas();
         return downloadImage;
     }
 
